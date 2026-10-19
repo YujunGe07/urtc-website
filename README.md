@@ -18,7 +18,7 @@ Then open http://localhost:4321.
 index.html          Home: hero, mission, format, essentials, roadmap, interest list
 about.html          What URTC is, who it's for, relationship to MIT URTC
 submit.html         Call for Research: formats, eligibility, dates, how to submit
-team.html           Join the Team: six open chair roles
+team.html           Join the Team: five open chair roles
 sponsors.html       Sponsor pitch + contact (tiers placeholder)
 contact.html        Contact routes + FAQ
 favicon.svg         Site icon (same as the logo mark)
