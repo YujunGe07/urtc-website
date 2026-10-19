@@ -12,7 +12,7 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="assets/css/styles.css">
   <script src="assets/js/config.js" defer></script>
   <script src="assets/js/main.js" defer></script>
@@ -67,9 +67,6 @@
             <circle class="orbit-dot" cx="549.2" cy="219" r="6"/>
           </g>
           <circle cx="300" cy="300" r="3.5" fill="#1c1b19"/>
-          <text class="orbit-label" x="308" y="18">N 37.43°</text>
-          <text class="orbit-label" x="344" y="294">Origin</text>
-          <text class="orbit-label" x="14" y="294">W 122.17°</text>
         </svg>
       </div>
 
@@ -77,7 +74,6 @@
         <p class="hero-meta">
           <span><strong>Undergraduate Research Technology Conference</strong></span>
           <span>Theme · <strong>Frontiers</strong></span>
-          <span>No. 01 · 37.4275° N, 122.1697° W</span>
         </p>
 
         <h1 id="hero-title" class="hero-title">
@@ -100,18 +96,6 @@
       <svg class="ridges" data-ridges="11" data-lines="14" data-animate aria-hidden="true" focusable="false"></svg>
     </section>
 
-    <!-- RESEARCH AREAS TICKER (decorative; the sr-only line carries the meaning) -->
-    <div class="ticker">
-      <p class="sr-only">Research areas welcome include robotics, machine learning, signal processing, photonics, biomedical devices, energy systems, quantum engineering, embedded systems, human-computer interaction, wireless communication, materials and computer architecture.</p>
-      <div class="ticker-track" aria-hidden="true">
-        <ul class="ticker-list">
-          <li>Robotics</li><li>Machine learning</li><li>Signal processing</li><li>Photonics</li><li>Biomedical devices</li><li>Energy systems</li><li>Quantum engineering</li><li>Embedded systems</li><li>Human–computer interaction</li><li>Wireless communication</li><li>Materials</li><li>Computer architecture</li>
-        </ul>
-        <ul class="ticker-list">
-          <li>Robotics</li><li>Machine learning</li><li>Signal processing</li><li>Photonics</li><li>Biomedical devices</li><li>Energy systems</li><li>Quantum engineering</li><li>Embedded systems</li><li>Human–computer interaction</li><li>Wireless communication</li><li>Materials</li><li>Computer architecture</li>
-        </ul>
-      </div>
-    </div>
 
     <!-- 01 MISSION -->
     <section class="section section--flush-top" aria-labelledby="mission-title">
@@ -124,7 +108,6 @@
           <div></div>
           <div class="stack reveal" data-delay="1">
             <p class="lede">Stanford URTC is a student-run conference where undergraduates and high school researchers present engineering and technology work through papers, posters and lightning talks. Every presenter gets written feedback from our technical chairs.</p>
-            <p class="lede">It's inspired by MIT URTC, which has run every October since 2015. We want to bring the same kind of event to the West Coast in the spring.</p>
             <p><a class="text-link" href="about.html">About the conference <span aria-hidden="true">→</span></a></p>
           </div>
         </div>
@@ -141,7 +124,17 @@
 
         <ul class="fig-grid reveal">
           <li class="fig-cell fig-cell--feature">
-            <div class="fig-label"><span>Fig. 2.1 · Posters</span><span>Core of the day</span></div>
+            <div class="fig-label"><span>Papers</span><span>Main event · 7 min</span></div>
+            <svg class="fig-icon" viewBox="0 0 64 64" aria-hidden="true">
+              <circle cx="32" cy="34" r="22"/>
+              <path class="accent" d="M32 12a22 22 0 0 1 14.1 5.1"/>
+              <path d="M32 34V20M32 34l6 4M28 6h8M32 6v6"/>
+            </svg>
+            <h3>Paper presentations</h3>
+            <p>The main event. Researchers present full papers in seven-minute talks, followed by questions from the audience and judges.</p>
+          </li>
+          <li class="fig-cell">
+            <div class="fig-label"><span>Posters</span><span>One-on-one</span></div>
             <svg class="fig-icon" viewBox="0 0 64 64" aria-hidden="true">
               <rect x="6" y="10" width="22" height="28"/><rect x="36" y="10" width="22" height="28"/>
               <path d="M10 18h14M10 23h10M40 18h14M40 23h10"/>
@@ -150,38 +143,28 @@
               <circle class="fill-accent" cx="54" cy="28" r="2"/>
             </svg>
             <h3>Poster sessions</h3>
-            <p>Most of the day happens here. Researchers stand with their work, explain it one-on-one, and talk with judges, peers and visitors in an open hall.</p>
+            <p>Researchers present their work one-on-one to judges, peers and visitors.</p>
           </li>
           <li class="fig-cell">
-            <div class="fig-label"><span>Fig. 2.2 · Papers</span><span>7 min</span></div>
-            <svg class="fig-icon" viewBox="0 0 64 64" aria-hidden="true">
-              <circle cx="32" cy="34" r="22"/>
-              <path class="accent" d="M32 12a22 22 0 0 1 14.1 5.1"/>
-              <path d="M32 34V20M32 34l6 4M28 6h8M32 6v6"/>
-            </svg>
-            <h3>Paper talks</h3>
-            <p>Seven-minute talks on full research papers, followed by questions from the audience.</p>
-          </li>
-          <li class="fig-cell">
-            <div class="fig-label"><span>Fig. 2.3 · Lightning</span><span>Short form</span></div>
+            <div class="fig-label"><span>Lightning</span><span>Short form</span></div>
             <svg class="fig-icon" viewBox="0 0 64 64" aria-hidden="true">
               <path d="M6 44h10l6-24 8 34 8-40 6 30h14"/>
               <path class="accent" d="M30 54 38 14"/>
             </svg>
             <h3>Lightning talks</h3>
-            <p>Very short talks, good for early results, works in progress, or a single striking finding.</p>
+            <p>Short talks for early results or works in progress.</p>
           </li>
           <li class="fig-cell">
-            <div class="fig-label"><span>Fig. 2.4 · Keynote</span><span>Plenary</span></div>
+            <div class="fig-label"><span>Keynote</span><span>Plenary</span></div>
             <svg class="fig-icon" viewBox="0 0 64 64" aria-hidden="true">
               <circle class="fill-accent" cx="32" cy="32" r="3"/>
               <circle cx="32" cy="32" r="11"/><circle cx="32" cy="32" r="19" stroke-dasharray="2 4"/><circle cx="32" cy="32" r="27" stroke-dasharray="1 5"/>
             </svg>
             <h3>Keynote</h3>
-            <p>A talk for everyone in the room from a researcher working at the edge of their field. <span class="tbc">Speaker TBA</span></p>
+            <p>A talk for the whole conference. <span class="tbc">Speaker TBA</span></p>
           </li>
           <li class="fig-cell">
-            <div class="fig-label"><span>Fig. 2.5 · Judging</span><span>Live</span></div>
+            <div class="fig-label"><span>Judging</span><span>Live</span></div>
             <svg class="fig-icon" viewBox="0 0 64 64" aria-hidden="true">
               <path d="M8 56h48M8 56V8"/>
               <rect x="14" y="36" width="8" height="20"/><rect x="28" y="24" width="8" height="32"/>
@@ -191,14 +174,14 @@
             <p>Judges score work during the sessions, attendees vote for their favorites, and awards are announced at the close of the day.</p>
           </li>
           <li class="fig-cell">
-            <div class="fig-label"><span>Fig. 2.6 · Feedback</span><span>Every presenter</span></div>
+            <div class="fig-label"><span>Feedback</span><span>Every presenter</span></div>
             <svg class="fig-icon" viewBox="0 0 64 64" aria-hidden="true">
               <rect x="10" y="6" width="36" height="50"/>
               <path d="M16 16h24M16 23h24M16 30h18M16 37h22M16 44h14"/>
               <path class="accent" d="M50 20c6 2 6 10 0 12M50 32l-4 4"/>
             </svg>
             <h3>Written feedback</h3>
-            <p>Every presenter gets written comments from the technical chairs, so you leave with notes to take back to your lab.</p>
+            <p>Every presenter gets written comments from the technical chairs.</p>
           </li>
         </ul>
       </div>
@@ -210,7 +193,6 @@
         <div class="section-head">
           <p class="section-num"><b>§ 03</b> — Impact</p>
           <h2 id="impact-title" class="section-title reveal">Why it <em>matters</em>.</h2>
-          <p class="lede reveal" data-delay="1">A lot of student research never leaves the lab notebook. URTC gives it an audience, gives the people who did it a way to grow, and gives the field a look at what's coming.</p>
         </div>
 
         <div class="impact-grid">
