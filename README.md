@@ -81,10 +81,10 @@ Every color and font is a variable at the top of `styles.css` (`:root`). Cardina
 
 ## Design notes
 
-- **Type:** Manrope for headings and body text, IBM Plex Mono for small labels and metadata. Both come from Google Fonts.
+- **Type:** Instrument Serif for editorial display text, Inter Tight for UI and body text, IBM Plex Mono for figure labels and metadata. All three come from Google Fonts.
 - **Motifs:** survey-style topographic contours (every fifth line is darker, like an index contour on a real map), orbital diagrams, graph-paper grid, a ridgeline "frontier" landscape with one cardinal ridge, and research-plot figures with "Fig." captions.
 - **Generative art:** contours and ridges are drawn by `main.js` from a seed (`data-contours="23"`, `data-ridges="11"`), so they look the same on every load. Change the number to get a different map.
-- **Motion:** slow orbits, a drifting ridgeline, scroll reveals and slight pointer parallax. All of it turns off when a visitor has "reduce motion" enabled.
+- **Motion:** slow orbits, a drifting ridgeline, a research-area ticker, scroll reveals and slight pointer parallax. All of it turns off when a visitor has "reduce motion" enabled.
 
 ## Accessibility checklist
 
