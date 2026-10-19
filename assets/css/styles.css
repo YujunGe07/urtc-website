@@ -32,6 +32,8 @@
   /* Type */
   --font-display: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-sans: "Manrope", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  /* Script accent for emphasized words in headlines (<em>). Swap freely. */
+  --font-accent: "Yellowtail", "Brush Script MT", cursive;
   --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   /* Layout */
@@ -428,7 +430,7 @@ a:hover { color: var(--cardinal); }
   line-height: 1.02;
   letter-spacing: -0.03em;
 }
-.hero-tagline em { font-style: normal; color: var(--cardinal); }
+
 
 .hero-foot {
   display: flex;
@@ -518,7 +520,16 @@ a:hover { color: var(--cardinal); }
   line-height: 1;
   letter-spacing: -0.045em;
 }
-.section-title em, .page-title em, .statement em { font-style: normal; color: var(--cardinal); }
+.section-title em, .page-title em, .statement em, .hero-tagline em, .footer-mark em {
+  font-family: var(--font-accent);
+  font-weight: 400;
+  font-style: normal;
+  font-size: 1.18em;
+  letter-spacing: 0;
+  line-height: 0;
+  padding: 0 0.06em 0 0.02em;
+  color: var(--cardinal);
+}
 
 .section-head .lede { grid-column: 1 / -1; }
 @media (min-width: 900px) { .section-head .lede { grid-column: 2; } }
