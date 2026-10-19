@@ -81,10 +81,15 @@ Every color and font is a variable at the top of `styles.css` (`:root`). Cardina
 
 ## Design notes
 
-- **Type:** Instrument Serif for editorial display text, Inter Tight for UI and body text, IBM Plex Mono for figure labels and metadata. All three come from Google Fonts.
-- **Motifs:** survey-style topographic contours (every fifth line is darker, like an index contour on a real map), orbital diagrams, graph-paper grid, a ridgeline "frontier" landscape with one cardinal ridge, and research-plot figures with "Fig." captions.
-- **Generative art:** contours and ridges are drawn by `main.js` from a seed (`data-contours="23"`, `data-ridges="11"`), so they look the same on every load. Change the number to get a different map.
-- **Motion:** slow orbits, a drifting ridgeline, a research-area ticker, scroll reveals and slight pointer parallax. All of it turns off when a visitor has "reduce motion" enabled.
+The look follows the Stanford IEEE Student Branch site (web.stanford.edu/group/ieee), using original artwork only.
+
+- **Palette:** near-black background (`--bg`), cool off-white text (`--fg`), cardinal `#8c1515` for buttons and a lighter red `--accent` (`#e06a5f`) for text, strokes and glows on dark.
+- **Type:** Geist for UI, body and big titles. Instrument Serif for section headings, with red italic accent words. Geist Mono, uppercase and wide-tracked, for labels. All three come from Google Fonts.
+- **Surfaces:** glass cards (`--glass`, 1px faint border, 14px radius) and pill buttons.
+- **Motifs:** an original silicon-die illustration in the hero, with the Frontiers topographic contours etched inside it and glowing red nodes. Also a ridgeline landscape with one glowing red ridge, and a scale bar.
+- **Navigation extras (homepage):** a right-edge section index (`.rail`, wide screens only) and a floating "Interest list" pill (`.float-pill`). Both are driven by `main.js`.
+- **Generative art:** contours and ridges are drawn by `main.js` from a seed (`data-contours="23"`, `data-ridges="11"`). Change the number to get a different map.
+- **Motion:** pulsing nodes, a drifting ridgeline, the ticker, scroll reveals and slight pointer parallax. All of it turns off for visitors with "reduce motion" on.
 
 ## Accessibility checklist
 

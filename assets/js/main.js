@@ -312,6 +312,38 @@
     reveals.forEach(function (n) { io.observe(n); });
   }
 
+  /* ---------------------------------------------------------------------- */
+  /* Section rail: highlight the section in view                             */
+  /* ---------------------------------------------------------------------- */
+  var rail = document.querySelector("[data-rail]");
+  if (rail && "IntersectionObserver" in window) {
+    var railLinks = rail.querySelectorAll("a[href^='#']");
+    var setActive = function (id) {
+      railLinks.forEach(function (a) {
+        if (a.getAttribute("href") === "#" + id) a.setAttribute("aria-current", "true");
+        else a.removeAttribute("aria-current");
+      });
+    };
+    var railIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    railLinks.forEach(function (a) {
+      var target = document.getElementById(a.getAttribute("href").slice(1));
+      if (target) railIO.observe(target);
+    });
+  }
+
+  /* Floating pill: hide once the interest-list section is on screen */
+  var pill = document.querySelector("[data-float-pill]");
+  var pillTarget = pill && document.querySelector(pill.getAttribute("href"));
+  if (pill && pillTarget && "IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
+      pill.classList.toggle("is-hidden", entries[0].isIntersecting);
+    }, { threshold: 0.15 }).observe(pillTarget);
+  }
+
   /* Footer year */
   document.querySelectorAll("[data-year]").forEach(function (n) {
     n.textContent = new Date().getFullYear();
