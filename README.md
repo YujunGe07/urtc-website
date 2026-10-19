@@ -48,7 +48,7 @@ Search the HTML for `class="tbc"`. Every unconfirmed item (the date, venue, Frid
 
 Content rules while things are pending:
 - List a host department only once it has approved. See the `TODO` in `about.html`.
-- IEEE Xplore: presented papers that meet IEEE's scope and quality requirements are submitted to IEEE Xplore. Keep this wording; don't promise publication.
+- IEEE Xplore: every accepted paper presented at the conference is published in IEEE Xplore (confirmed by the conference chair).
 - Don't use Stanford or IEEE logos unless you have written permission.
 - Describe MIT URTC as an inspiration only. Stanford URTC is not an official MIT event.
 
