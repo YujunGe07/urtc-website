@@ -938,6 +938,11 @@ a:hover { color: var(--accent); }
 .no { color: var(--muted); font-weight: 400; }
 .no::before { content: ""; width: 10px; height: 1px; background: currentColor; }
 
+/* Sponsorship tier comparison */
+.tier-table th:not(:first-child), .tier-table td { text-align: center; width: 14%; }
+.tier-table thead th:not(:first-child) { font-size: 0.875rem; color: var(--fg); }
+.tier-table tfoot th, .tier-table tfoot td { border-top: 1px solid var(--line-strong); border-bottom: 0; font-weight: 600; }
+
 /* Callout */
 .note {
   display: grid;
