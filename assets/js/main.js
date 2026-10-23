@@ -3,8 +3,9 @@
    - Mobile navigation
    - Fills links/text from config.js
    - Interest-list form
-   - Generative "Frontiers" art: topographic contours + ridgeline landscape
-   - Scroll reveals and subtle pointer parallax
+   - Header backdrop once the page scrolls
+   - Scroll reveals, and mono labels that decode like a terminal
+   The ASCII art lives in ascii.js.
    Everything decorative respects prefers-reduced-motion.
    ========================================================================== */
 (function () {
@@ -15,7 +16,11 @@
 
   var cfg = window.URTC_CONFIG || {};
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var SVG_NS = "http://www.w3.org/2000/svg";
+
+  /* Header gets its backdrop once the page has scrolled */
+  var onScroll = function () { root.classList.toggle("is-scrolled", window.scrollY > 8); };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
 
   /* ---------------------------------------------------------------------- */
   /* Mobile navigation                                                       */
@@ -136,165 +141,6 @@
   });
 
   /* ---------------------------------------------------------------------- */
-  /* Generative art helpers                                                  */
-  /* ---------------------------------------------------------------------- */
-
-  // Small seeded PRNG so the art is identical on every load.
-  function rng(seed) {
-    var s = (seed >>> 0) || 1;
-    return function () {
-      s ^= s << 13; s >>>= 0;
-      s ^= s >>> 17;
-      s ^= s << 5; s >>>= 0;
-      return s / 4294967296;
-    };
-  }
-
-  // 1-D value noise with smoothstep, layered into fractal noise.
-  function makeNoise(rand) {
-    var size = 256;
-    var table = [];
-    for (var i = 0; i < size; i++) table.push(rand());
-    function n(x) {
-      var i0 = Math.floor(x);
-      var f = x - i0;
-      var t = f * f * (3 - 2 * f);
-      var a = table[((i0 % size) + size) % size];
-      var b = table[(((i0 + 1) % size) + size) % size];
-      return a + (b - a) * t;
-    }
-    return function fbm(x) {
-      return n(x) * 0.6 + n(x * 2.1 + 17) * 0.28 + n(x * 4.3 + 41) * 0.12;
-    };
-  }
-
-  function el(name, attrs) {
-    var node = document.createElementNS(SVG_NS, name);
-    for (var k in attrs) node.setAttribute(k, attrs[k]);
-    return node;
-  }
-
-  /* Topographic contours: <svg data-contours="seed" data-rings="16"> */
-  function drawContours(svg) {
-    var rand = rng(parseInt(svg.getAttribute("data-contours"), 10) || 7);
-    var rings = parseInt(svg.getAttribute("data-rings"), 10) || 16;
-    var cx = parseFloat(svg.getAttribute("data-cx")) || 300;
-    var cy = parseFloat(svg.getAttribute("data-cy")) || 300;
-    var maxR = 290;
-    var harmonics = [];
-    for (var h = 0; h < 5; h++) {
-      harmonics.push({ k: h + 2, a: (0.03 + rand() * 0.07) / (1 + h * 0.6), p: rand() * Math.PI * 2 });
-    }
-    var driftX = (rand() - 0.5) * 3;
-    var driftY = (rand() - 0.5) * 3;
-    var steps = 160;
-    var frag = document.createDocumentFragment();
-
-    for (var i = 1; i <= rings; i++) {
-      var base = (i / rings) * maxR;
-      var ox = cx + driftX * i;
-      var oy = cy + driftY * i;
-      var d = "";
-      for (var s = 0; s <= steps; s++) {
-        var th = (s / steps) * Math.PI * 2;
-        var r = 1;
-        for (var j = 0; j < harmonics.length; j++) {
-          var hm = harmonics[j];
-          r += hm.a * Math.sin(hm.k * th + hm.p + i * 0.18) * (0.5 + i / rings);
-        }
-        var x = ox + Math.cos(th) * base * r;
-        var y = oy + Math.sin(th) * base * r * 0.92;
-        d += (s ? "L" : "M") + x.toFixed(1) + " " + y.toFixed(1);
-      }
-      // Every fifth line is an "index contour", as on a survey map.
-      frag.appendChild(el("path", { d: d + "Z", class: i % 5 === 0 ? "is-index" : "" }));
-    }
-    svg.appendChild(frag);
-  }
-
-  /* Ridgeline landscape: <svg data-ridges="seed" data-lines="14" data-animate> */
-  function drawRidges(svg) {
-    var rand = rng(parseInt(svg.getAttribute("data-ridges"), 10) || 11);
-    var noise = makeNoise(rand);
-    var lines = parseInt(svg.getAttribute("data-lines"), 10) || 14;
-    var W = 1440, H = 260, pts = 96;
-    svg.setAttribute("viewBox", "0 0 " + W + " " + H);
-    svg.setAttribute("preserveAspectRatio", "none");
-
-    var paths = [];
-    for (var j = 0; j < lines; j++) {
-      var p = el("path", {});
-      // One ridge, near the front, is drawn in cardinal: "the frontier".
-      if (j === lines - 3) p.setAttribute("class", "is-frontier");
-      p.style.strokeOpacity = (0.18 + (j / lines) * 0.62).toFixed(2);
-      svg.appendChild(p);
-      paths.push(p);
-    }
-
-    function render(t) {
-      for (var j = 0; j < lines; j++) {
-        var baseY = 30 + (j / (lines - 1)) * (H - 46);
-        var amp = 46 + j * 3.2;
-        var d = "M0 " + H;
-        for (var i = 0; i <= pts; i++) {
-          var u = i / pts;
-          // Envelope: peaks rise toward the right, like a far range.
-          var env = 0.35 + 0.65 * Math.pow(Math.sin(Math.PI * (0.15 + u * 0.8)), 1.6);
-          var y = baseY - amp * env * noise(u * 6 + j * 0.53 + t);
-          d += "L" + (u * W).toFixed(1) + " " + y.toFixed(1);
-        }
-        paths[j].setAttribute("d", d + "L" + W + " " + H + "Z");
-      }
-    }
-
-    render(0);
-
-    if (reduceMotion || !svg.hasAttribute("data-animate")) return;
-
-    var t = 0, last = 0, visible = true, raf = null;
-    function tick(now) {
-      raf = null;
-      if (!visible || document.hidden) return;
-      if (now - last > 33) { // ~30 fps is plenty for a slow drift
-        t += 0.0035;
-        render(t);
-        last = now;
-      }
-      raf = requestAnimationFrame(tick);
-    }
-    if ("IntersectionObserver" in window) {
-      new IntersectionObserver(function (entries) {
-        visible = entries[0].isIntersecting;
-        if (visible && !raf) raf = requestAnimationFrame(tick);
-      }).observe(svg);
-    }
-    document.addEventListener("visibilitychange", function () {
-      if (!document.hidden && visible && !raf) raf = requestAnimationFrame(tick);
-    });
-    raf = requestAnimationFrame(tick);
-  }
-
-  document.querySelectorAll("svg[data-contours]").forEach(drawContours);
-  document.querySelectorAll("svg[data-ridges]").forEach(drawRidges);
-
-  /* ---------------------------------------------------------------------- */
-  /* Pointer parallax on the hero art                                        */
-  /* ---------------------------------------------------------------------- */
-  var hero = document.querySelector("[data-parallax]");
-  if (hero && !reduceMotion && window.matchMedia("(pointer: fine)").matches) {
-    var art = hero.querySelector(".hero-art");
-    hero.addEventListener("pointermove", function (e) {
-      var r = hero.getBoundingClientRect();
-      art.style.setProperty("--px", ((e.clientX - r.left) / r.width - 0.5).toFixed(3));
-      art.style.setProperty("--py", ((e.clientY - r.top) / r.height - 0.5).toFixed(3));
-    });
-    hero.addEventListener("pointerleave", function () {
-      art.style.setProperty("--px", 0);
-      art.style.setProperty("--py", 0);
-    });
-  }
-
-  /* ---------------------------------------------------------------------- */
   /* Scroll reveals                                                          */
   /* ---------------------------------------------------------------------- */
   var reveals = document.querySelectorAll(".reveal");
@@ -310,6 +156,152 @@
       });
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
     reveals.forEach(function (n) { io.observe(n); });
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* Decoding labels: mono text scrambles, then settles left to right.       */
+  /* Section labels decode once as they scroll in; links decode on hover.    */
+  /* Only used on mono text or tabular figures, so the width never jumps.    */
+  /* ---------------------------------------------------------------------- */
+  var GLYPHS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#%&*+=/<>";
+  var DIGITS = "0123456789";
+
+  function decode(el, glyphs) {
+    glyphs = glyphs || GLYPHS;
+    if (reduceMotion || el._decoding) return;
+    var nodes = [];
+    var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    while (walker.nextNode()) {
+      if (walker.currentNode.nodeValue.trim()) nodes.push(walker.currentNode);
+    }
+    if (!nodes.length) return;
+    var originals = nodes.map(function (n) { return n.nodeValue; });
+    var length = originals.join("").length;
+    var duration = Math.min(900, 320 + length * 14);
+    var begin = performance.now();
+    el._decoding = true;
+
+    (function frame(now) {
+      var p = Math.min(1, (now - begin) / duration);
+      var seen = 0;
+      nodes.forEach(function (node, k) {
+        var text = originals[k], out = "";
+        for (var i = 0; i < text.length; i++, seen++) {
+          var ch = text[i];
+          var keep = ch === " " || p >= 1 || seen / length < p || (glyphs === DIGITS && !/\d/.test(ch));
+          out += keep ? ch : glyphs[(Math.random() * glyphs.length) | 0];
+        }
+        node.nodeValue = out;
+      });
+      if (p < 1) requestAnimationFrame(frame);
+      else el._decoding = false;
+    })(begin);
+  }
+
+  if (!reduceMotion && "IntersectionObserver" in window) {
+    var decodeIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        decode(entry.target);
+        decodeIO.unobserve(entry.target);
+      });
+    }, { threshold: 0.6 });
+    document.querySelectorAll(".section-num, .eyebrow, .hero-meta").forEach(function (n) { decodeIO.observe(n); });
+
+    // Figures count in by spinning through digits
+    var statIO = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        decode(entry.target, DIGITS);
+        statIO.unobserve(entry.target);
+      });
+    }, { threshold: 0.8 });
+    document.querySelectorAll(".stat-num").forEach(function (n) { statIO.observe(n); });
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* Words: section titles light up word by word as they scroll up the        */
+  /* screen, and each track's notes rise in word by word as it takes the lead */
+  /* ---------------------------------------------------------------------- */
+  // Wraps every word under el (inside <em> too) in a span; returns the spans in order
+  function splitWords(el, className) {
+    var words = [];
+    var wrap = function (node) {
+      if (node.nodeType === 3) {
+        var frag = document.createDocumentFragment();
+        node.nodeValue.split(/(\s+)/).forEach(function (part) {
+          if (!part) return;
+          if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(part)); return; }
+          var span = document.createElement("span");
+          span.className = className;
+          span.textContent = part;
+          words.push(span);
+          frag.appendChild(span);
+        });
+        node.parentNode.replaceChild(frag, node);
+      } else if (node.nodeType === 1 && !node.classList.contains("tbc")) {
+        Array.prototype.slice.call(node.childNodes).forEach(wrap);
+      }
+    };
+    Array.prototype.slice.call(el.childNodes).forEach(wrap);
+    return words;
+  }
+
+  if (!reduceMotion) {
+    document.querySelectorAll(".statement, .section-title").forEach(function (el) {
+      var words = splitWords(el, "w");
+      if (!words.length) return;
+      el.classList.remove("reveal");   // the words do the entrance now
+      el.classList.add("is-scrubbed");
+
+      var ticking = false;
+      var update = function () {
+        ticking = false;
+        var r = el.getBoundingClientRect(), vh = window.innerHeight;
+        // Starts lighting as the top crosses 92% of the screen, fully lit after another third of a screen
+        var p = (vh * 0.92 - r.top) / (vh * 0.32);
+        var lit = Math.round(Math.max(0, Math.min(1, p)) * words.length);
+        words.forEach(function (w, i) { w.classList.toggle("is-lit", i < lit); });
+      };
+      window.addEventListener("scroll", function () {
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+      }, { passive: true });
+      update();
+    });
+
+    document.querySelectorAll(".track").forEach(function (item) {
+      var n = 0;
+      item.querySelectorAll(".track-title, .track-desc").forEach(function (el) {
+        splitWords(el, "tw").forEach(function (w) { w.style.setProperty("--i", n++); });
+      });
+    });
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* Pointer spotlight on cards and cells (fine pointers only)               */
+  /* ---------------------------------------------------------------------- */
+  if (window.matchMedia("(pointer: fine)").matches) {
+    var SPOT = ".card, .fig-cell, .roadmap li, .steps li, .stat, .track";
+    document.addEventListener("pointermove", function (e) {
+      var el = e.target.closest && e.target.closest(SPOT);
+      if (!el) return;
+      var r = el.getBoundingClientRect();
+      el.style.setProperty("--mx", (e.clientX - r.left).toFixed(0) + "px");
+      el.style.setProperty("--my", (e.clientY - r.top).toFixed(0) + "px");
+    }, { passive: true });
+    document.addEventListener("pointerout", function (e) {
+      var el = e.target.closest && e.target.closest(SPOT);
+      if (el && !el.contains(e.relatedTarget)) {
+        el.style.removeProperty("--mx");
+        el.style.removeProperty("--my");
+      }
+    });
+  }
+
+  if (window.matchMedia("(pointer: fine)").matches) {
+    document.querySelectorAll(".nav-list a:not(.btn), .text-link, .rail a").forEach(function (a) {
+      a.addEventListener("pointerenter", function () { decode(a); });
+    });
   }
 
   /* ---------------------------------------------------------------------- */
@@ -335,13 +327,59 @@
     });
   }
 
-  /* Floating pill: hide once the interest-list section is on screen */
+  /* Floating pill: hidden over the hero (it has its own buttons), the tracks race
+     (it would sit on the race panel) and once the interest list is on screen */
   var pill = document.querySelector("[data-float-pill]");
   var pillTarget = pill && document.querySelector(pill.getAttribute("href"));
+  var pillHero = document.querySelector(".hero");
+  var pillRace = document.querySelector("[data-race-stage]");
   if (pill && pillTarget && "IntersectionObserver" in window) {
-    new IntersectionObserver(function (entries) {
-      pill.classList.toggle("is-hidden", entries[0].isIntersecting);
-    }, { threshold: 0.15 }).observe(pillTarget);
+    var inView = new Map();
+    var onView = function (entries) {
+      entries.forEach(function (entry) { inView.set(entry.target, entry.isIntersecting); });
+      var hide = false;
+      inView.forEach(function (v) { hide = hide || v; });
+      pill.classList.toggle("is-hidden", hide);
+    };
+    var pillIO = new IntersectionObserver(onView, { threshold: 0.15 });
+    pillIO.observe(pillTarget);
+    if (pillHero) pillIO.observe(pillHero);
+    // The race stage is many screens tall, so any overlap at all counts
+    if (pillRace) new IntersectionObserver(onView).observe(pillRace);
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* Cursor: a dot that opens into a ring over anything you can click.       */
+  /* Mouse only; touch and pens keep the system's own pointer.               */
+  /* ---------------------------------------------------------------------- */
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    var cursor = document.createElement("div");
+    var CLICKABLE = "a, button, summary, label, select, [role='button'], [tabindex]:not([tabindex='-1'])";
+    var TYPING = "input, textarea, [contenteditable='true']";
+    var cursorX = 0, cursorY = 0, cursorRaf = null;
+    cursor.className = "cursor is-off";
+    cursor.setAttribute("aria-hidden", "true");
+    document.body.appendChild(cursor);
+    root.classList.add("has-cursor");
+
+    var place = function () {
+      cursorRaf = null;
+      cursor.style.transform = "translate3d(" + cursorX + "px, " + cursorY + "px, 0)";
+    };
+    document.addEventListener("pointermove", function (e) {
+      if (e.pointerType !== "mouse") return;
+      var t = e.target;
+      cursorX = e.clientX;
+      cursorY = e.clientY;
+      cursor.classList.remove("is-off");
+      cursor.classList.toggle("is-hover", !!(t.closest && t.closest(CLICKABLE)));
+      cursor.classList.toggle("is-text", !!(t.closest && t.closest(TYPING)));
+      if (!cursorRaf) cursorRaf = requestAnimationFrame(place);
+    }, { passive: true });
+    document.addEventListener("pointerdown", function () { cursor.classList.add("is-down"); });
+    document.addEventListener("pointerup", function () { cursor.classList.remove("is-down"); });
+    document.documentElement.addEventListener("mouseleave", function () { cursor.classList.add("is-off"); });
+    window.addEventListener("blur", function () { cursor.classList.add("is-off"); });
   }
 
   /* Footer year */

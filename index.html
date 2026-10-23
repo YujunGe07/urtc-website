@@ -5,17 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Stanford URTC 2027 · Explore the Frontiers of Undergraduate Research</title>
   <meta name="description" content="Stanford URTC is a student-run research conference where undergraduate and high school researchers present engineering and technology work through papers, posters and lightning talks.">
-  <meta name="theme-color" content="#0a0a0b">
+  <meta name="theme-color" content="#0c0b0b">
   <meta property="og:title" content="Stanford URTC 2027 · Frontiers">
   <meta property="og:description" content="A student-run conference for undergraduate engineering and technology research at Stanford University.">
   <meta property="og:type" content="website">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500&display=swap">
   <link rel="stylesheet" href="assets/css/styles.css">
   <script src="assets/js/config.js" defer></script>
   <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/ascii.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -24,7 +25,7 @@
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="index.html" aria-label="Stanford URTC home">
-        <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false"><circle cx="20" cy="20" r="18.25" stroke="currentColor" stroke-width="1.5"/><path d="M2.6 25.2 9.6 19.4l4 2.9 7.2-8.9 6.1 7.3 3-2.3 7.5 6.6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M4.5 29.5h31" stroke="currentColor" stroke-dasharray="1.5 2.5"/><circle cx="20.8" cy="7.6" r="2.6" fill="#e06a5f"/></svg>
+        <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false"><circle cx="20" cy="20" r="18.25" stroke="currentColor" stroke-width="1.5"/><path d="M2.6 25.2 9.6 19.4l4 2.9 7.2-8.9 6.1 7.3 3-2.3 7.5 6.6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M4.5 29.5h31" stroke="currentColor" stroke-dasharray="1.5 2.5"/><circle cx="20.8" cy="7.6" r="2.6" fill="#f0464b"/></svg>
         <span class="brand-name">Stanford <strong>URTC</strong></span>
       </a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
@@ -45,211 +46,41 @@
 
   <main id="main">
 
-    <!-- HERO -->
-    <section id="top" class="hero graph-paper" aria-labelledby="hero-title" data-parallax>
-      <div class="hero-art" aria-hidden="true">
-        <svg class="die" viewBox="0 0 600 600">
-          <rect class="die-pkg" x="30" y="30" width="540" height="540" rx="22"/>
-          <circle class="die-fid" cx="56" cy="56" r="4"/><circle class="die-fid" cx="544" cy="544" r="4"/>
-          <rect class="die-pad" x="121.0" y="66" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="121.0" y="528" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="66" y="121.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="528" y="121.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="146.5" y="66" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="146.5" y="528" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="66" y="146.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="528" y="146.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="172.0" y="66" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="172.0" y="528" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="66" y="172.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="528" y="172.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="197.5" y="66" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="197.5" y="528" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="66" y="197.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="528" y="197.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="223.0" y="66" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="223.0" y="528" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="66" y="223.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="528" y="223.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="248.5" y="66" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="248.5" y="528" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="66" y="248.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="528" y="248.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="274.0" y="66" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="274.0" y="528" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="66" y="274.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="528" y="274.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="299.5" y="66" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="299.5" y="528" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="66" y="299.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="528" y="299.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="325.0" y="66" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="325.0" y="528" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="66" y="325.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="528" y="325.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="350.5" y="66" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="350.5" y="528" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="66" y="350.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="528" y="350.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="376.0" y="66" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="376.0" y="528" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="66" y="376.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="528" y="376.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="401.5" y="66" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="401.5" y="528" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="66" y="401.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="528" y="401.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="427.0" y="66" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="427.0" y="528" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="66" y="427.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="528" y="427.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="452.5" y="66" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="452.5" y="528" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="66" y="452.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="528" y="452.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="478.0" y="66" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="478.0" y="528" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="66" y="478.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="528" y="478.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="121.0" y="80" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="121.0" y="514" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="80" y="121.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="514" y="121.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="146.5" y="80" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="146.5" y="514" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="80" y="146.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="514" y="146.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="172.0" y="80" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="172.0" y="514" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="80" y="172.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="514" y="172.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="197.5" y="80" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="197.5" y="514" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="80" y="197.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="514" y="197.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="223.0" y="80" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="223.0" y="514" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="80" y="223.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="514" y="223.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="248.5" y="80" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="248.5" y="514" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="80" y="248.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="514" y="248.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="274.0" y="80" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="274.0" y="514" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="80" y="274.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="514" y="274.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="299.5" y="80" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="299.5" y="514" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="80" y="299.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="514" y="299.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="325.0" y="80" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="325.0" y="514" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="80" y="325.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="514" y="325.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="350.5" y="80" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="350.5" y="514" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="80" y="350.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="514" y="350.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="376.0" y="80" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="376.0" y="514" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="80" y="376.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="514" y="376.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="401.5" y="80" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="401.5" y="514" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="80" y="401.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="514" y="401.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="427.0" y="80" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="427.0" y="514" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="80" y="427.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="514" y="427.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="452.5" y="80" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="452.5" y="514" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="80" y="452.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="514" y="452.5" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="478.0" y="80" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="478.0" y="514" width="10" height="6" rx="1"/>
-          <rect class="die-pad" x="80" y="478.0" width="6" height="10" rx="1"/>
-          <rect class="die-pad" x="514" y="478.0" width="6" height="10" rx="1"/>
-          <path class="die-trace" d="M248.0 180 V120 H151.5 V92"/>
-          <path class="die-trace" d="M248.0 420 V480 H151.5 V508"/>
-          <path class="die-trace" d="M180 248.0 H120 V151.5 H92"/>
-          <path class="die-trace" d="M420 248.0 H480 V151.5 H508"/>
-          <path class="die-trace" d="M265.9 180 V134 H202.5 V92"/>
-          <path class="die-trace" d="M265.9 420 V466 H202.5 V508"/>
-          <path class="die-trace" d="M180 265.9 H134 V202.5 H92"/>
-          <path class="die-trace" d="M420 265.9 H466 V202.5 H508"/>
-          <path class="die-trace" d="M283.7 180 V148 H253.5 V92"/>
-          <path class="die-trace" d="M283.7 420 V452 H253.5 V508"/>
-          <path class="die-trace" d="M180 283.7 H148 V253.5 H92"/>
-          <path class="die-trace" d="M420 283.7 H452 V253.5 H508"/>
-          <path class="die-trace" d="M301.6 180 V120 H304.5 V92"/>
-          <path class="die-trace" d="M301.6 420 V480 H304.5 V508"/>
-          <path class="die-trace" d="M180 301.6 H120 V304.5 H92"/>
-          <path class="die-trace" d="M420 301.6 H480 V304.5 H508"/>
-          <path class="die-trace" d="M319.4 180 V134 H355.5 V92"/>
-          <path class="die-trace" d="M319.4 420 V466 H355.5 V508"/>
-          <path class="die-trace" d="M180 319.4 H134 V355.5 H92"/>
-          <path class="die-trace" d="M420 319.4 H466 V355.5 H508"/>
-          <path class="die-trace" d="M337.3 180 V148 H406.5 V92"/>
-          <path class="die-trace" d="M337.3 420 V452 H406.5 V508"/>
-          <path class="die-trace" d="M180 337.3 H148 V406.5 H92"/>
-          <path class="die-trace" d="M420 337.3 H452 V406.5 H508"/>
-          <path class="die-trace" d="M355.1 180 V120 H457.5 V92"/>
-          <path class="die-trace" d="M355.1 420 V480 H457.5 V508"/>
-          <path class="die-trace" d="M180 355.1 H120 V457.5 H92"/>
-          <path class="die-trace" d="M420 355.1 H480 V457.5 H508"/>
-          <rect class="die-core" x="180" y="180" width="240" height="240" rx="4"/>
-          <svg class="contours" x="184" y="184" width="232" height="232" viewBox="0 0 600 600" data-contours="23" data-rings="18" data-cx="300" data-cy="300"></svg>
-          <rect class="die-cell" x="291" y="291" width="18" height="18" rx="2"/>
-          <circle class="die-node" cx="300" cy="300" r="3"/>
-          <circle class="die-node" cx="151.5" cy="92.0" r="2.6"/>
-          <circle class="die-node" cx="151.5" cy="508.0" r="2.6"/>
-          <circle class="die-node" cx="508.0" cy="151.5" r="2.6"/>
-          <circle class="die-node" cx="92.0" cy="202.5" r="2.6"/>
-          <circle class="die-node" cx="253.5" cy="92.0" r="2.6"/>
-          <circle class="die-node" cx="92.0" cy="253.5" r="2.6"/>
-          <circle class="die-node" cx="508.0" cy="253.5" r="2.6"/>
-          <circle class="die-node" cx="92.0" cy="304.5" r="2.6"/>
-          <circle class="die-node" cx="508.0" cy="304.5" r="2.6"/>
-          <circle class="die-node" cx="406.5" cy="508.0" r="2.6"/>
-          <circle class="die-node" cx="508.0" cy="406.5" r="2.6"/>
-          <circle class="die-node" cx="457.5" cy="92.0" r="2.6"/>
-          <circle class="die-node" cx="457.5" cy="508.0" r="2.6"/>
-          <circle class="die-node" cx="92.0" cy="457.5" r="2.6"/>
-          <circle class="die-node" cx="236.0" cy="254.0" r="2.6"/>
-          <circle class="die-node" cx="352.0" cy="330.0" r="2.6"/>
-          <circle class="die-node" cx="268.0" cy="372.0" r="2.6"/>
-          <circle class="die-node" cx="340.0" cy="226.0" r="2.6"/>
-        </svg>
-      </div>
+    <!-- HERO: the landscape and the URTC 2027 wordmark are drawn in characters by ascii.js.
+         The wordmark is set exactly where #hero-word sits (its real text is hidden once drawn).
+         data-seed changes the terrain; the ridgelines' horizon sits in .hero-horizon. -->
+    <section id="top" class="hero" aria-labelledby="hero-title" data-ascii-host>
+      <canvas class="ascii" data-ascii="terrain" data-seed="23" data-word-from="#hero-word" data-intensity="0.85" aria-hidden="true"></canvas>
+
+      <div class="hero-frame" aria-hidden="true"><span>37.4275° N</span><span>122.1697° W</span></div>
 
       <div class="container hero-inner">
-        <p class="hero-meta">
-          <span><strong>Undergraduate Research Technology Conference</strong></span>
-          <span>Theme · <strong>Frontiers</strong></span>
-          <span>No. 01 · 37.4275° N, 122.1697° W</span>
-        </p>
+        <div class="hero-top">
+          <p class="hero-meta rise">
+            <span><strong>Undergraduate Research Technology Conference</strong></span>
+            <span>Theme · <strong>Frontiers</strong></span>
+            <span>No. 01</span>
+          </p>
+          <h1 id="hero-title" class="hero-title"><span class="sr-only">Stanford </span><span id="hero-word" class="hero-wordmark"><span data-ascii-run>URTC</span> <span class="year" data-ascii-run="accent">2027</span></span></h1>
+        </div>
 
-        <h1 id="hero-title" class="hero-title">
-          <span class="hero-wordmark rise">URTC <span class="year">2027</span></span>
-          <span class="hero-tagline rise">Explore the <em>Frontiers</em> of Undergraduate Research</span>
-        </h1>
+        <div class="hero-horizon" data-ascii-horizon aria-hidden="true"></div>
 
-        <div class="hero-foot rise rise-3">
-          <div class="hero-place">
-            <span class="hero-place-line">Stanford University</span>
-            <span class="hero-place-line">May 2027 <span class="tbc">Date tentative</span></span>
-          </div>
-          <div class="hero-cta">
-            <a class="btn btn-primary" href="submit.html">Submit Research <span class="arrow" aria-hidden="true">→</span></a>
-            <a class="btn btn-ghost" href="#interest">Attend <span class="arrow" aria-hidden="true">→</span></a>
+        <div class="hero-bottom rise rise-2">
+          <p class="hero-tagline">Explore the <em>frontiers</em> of undergraduate research</p>
+          <div class="hero-foot">
+            <div class="hero-place">
+              <span class="hero-place-line">Stanford University</span>
+              <span class="hero-place-line">May 2027 <span class="tbc">Date tentative</span></span>
+            </div>
+            <div class="hero-cta">
+              <a class="btn btn-primary" href="submit.html">Submit research <span class="arrow" aria-hidden="true">→</span></a>
+              <a class="btn btn-ghost" href="#interest">Attend <span class="arrow" aria-hidden="true">→</span></a>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="scale-bar" aria-hidden="true">1 mm</div>
-      <svg class="ridges" data-ridges="11" data-lines="14" data-animate aria-hidden="true" focusable="false"></svg>
     </section>
 
     <!-- RESEARCH AREAS TICKER (decorative; the sr-only line carries the meaning) -->
@@ -269,7 +100,7 @@
     <section id="mission" class="section section--flush-top" aria-labelledby="mission-title">
       <div class="container">
         <div class="section-head">
-          <p class="section-num"><b>§ 01</b> — Mission</p>
+          <p class="section-num"><b>01</b> Mission</p>
           <h2 id="mission-title" class="statement reveal">A stage for students doing <em>real research</em>, and a room full of people who want to hear about it.</h2>
         </div>
         <div class="split">
@@ -280,6 +111,12 @@
             <p><a class="text-link" href="about.html">About the conference <span aria-hidden="true">→</span></a></p>
           </div>
         </div>
+        <dl class="stats reveal">
+          <div class="stat"><dt>Day, fully in person</dt><dd class="stat-num">1</dd></div>
+          <div class="stat"><dt>Core research tracks</dt><dd class="stat-num">6</dd></div>
+          <div class="stat"><dt>Ways to present: papers, posters, lightning talks</dt><dd class="stat-num">3</dd></div>
+          <div class="stat"><dt>Researchers and guests expected</dt><dd class="stat-num">100–150</dd></div>
+        </dl>
       </div>
     </section>
 
@@ -287,7 +124,7 @@
     <section id="format" class="section" aria-labelledby="format-title">
       <div class="container">
         <div class="section-head">
-          <p class="section-num"><b>§ 02</b> — Format</p>
+          <p class="section-num"><b>02</b> Format</p>
           <h2 id="format-title" class="section-title reveal">One day. <em>Six</em> ways to share your work.</h2>
         </div>
 
@@ -356,11 +193,76 @@
       </div>
     </section>
 
-    <!-- 03 IMPACT -->
+    <!-- 03 TRACKS. The race is drawn by ascii.js (data-ascii="race"): scrolling through .race moves
+         the six craft down the screen, and each track's .track notes show beside its craft while it leads.
+         Replace the placeholder name and description in each .track (and the craft's aria-label). -->
+    <section id="tracks" class="section tracks" aria-labelledby="tracks-title" data-race>
+      <div class="container">
+        <div class="section-head">
+          <p class="section-num"><b>03</b> Tracks</p>
+          <h2 id="tracks-title" class="section-title reveal">Six <em>tracks</em> to the frontier.</h2>
+          <p class="lede reveal" data-delay="1">Every submission joins one of six core tracks. <span class="race-hint">Scroll to watch them trade the lead, or click one to bring it to the front.</span></p>
+        </div>
+      </div>
+
+      <div class="race" data-race-stage>
+        <div class="race-sticky">
+          <div class="race-track" data-ascii-host>
+            <canvas class="ascii" data-ascii="race" data-seed="12" aria-hidden="true"></canvas>
+            <div class="race-cars">
+              <button class="car" type="button" data-car="0" aria-label="Track A: bring it to the front"><svg class="car-body" viewBox="0 0 64 84" aria-hidden="true" focusable="false"><path class="car-fins" d="M20 16 6 28v16l14-6zM44 16l14 12v16l-14-6z"/><path class="car-hull" d="M32 82c-7-8-12-20-12-34V16c0-7 5-12 12-12s12 5 12 12v32c0 14-5 26-12 34z"/><path class="car-glass" d="M27 56c2 7 3 10 5 13 2-3 3-6 5-13z"/><path class="car-jets" d="M25 2h5M34 2h5"/></svg><span class="car-letter" aria-hidden="true">A</span></button>
+              <button class="car" type="button" data-car="1" aria-label="Track B: bring it to the front"><svg class="car-body" viewBox="0 0 64 84" aria-hidden="true" focusable="false"><path class="car-fins" d="M20 16 6 28v16l14-6zM44 16l14 12v16l-14-6z"/><path class="car-hull" d="M32 82c-7-8-12-20-12-34V16c0-7 5-12 12-12s12 5 12 12v32c0 14-5 26-12 34z"/><path class="car-glass" d="M27 56c2 7 3 10 5 13 2-3 3-6 5-13z"/><path class="car-jets" d="M25 2h5M34 2h5"/></svg><span class="car-letter" aria-hidden="true">B</span></button>
+              <button class="car" type="button" data-car="2" aria-label="Track C: bring it to the front"><svg class="car-body" viewBox="0 0 64 84" aria-hidden="true" focusable="false"><path class="car-fins" d="M20 16 6 28v16l14-6zM44 16l14 12v16l-14-6z"/><path class="car-hull" d="M32 82c-7-8-12-20-12-34V16c0-7 5-12 12-12s12 5 12 12v32c0 14-5 26-12 34z"/><path class="car-glass" d="M27 56c2 7 3 10 5 13 2-3 3-6 5-13z"/><path class="car-jets" d="M25 2h5M34 2h5"/></svg><span class="car-letter" aria-hidden="true">C</span></button>
+              <button class="car" type="button" data-car="3" aria-label="Track D: bring it to the front"><svg class="car-body" viewBox="0 0 64 84" aria-hidden="true" focusable="false"><path class="car-fins" d="M20 16 6 28v16l14-6zM44 16l14 12v16l-14-6z"/><path class="car-hull" d="M32 82c-7-8-12-20-12-34V16c0-7 5-12 12-12s12 5 12 12v32c0 14-5 26-12 34z"/><path class="car-glass" d="M27 56c2 7 3 10 5 13 2-3 3-6 5-13z"/><path class="car-jets" d="M25 2h5M34 2h5"/></svg><span class="car-letter" aria-hidden="true">D</span></button>
+              <button class="car" type="button" data-car="4" aria-label="Track E: bring it to the front"><svg class="car-body" viewBox="0 0 64 84" aria-hidden="true" focusable="false"><path class="car-fins" d="M20 16 6 28v16l14-6zM44 16l14 12v16l-14-6z"/><path class="car-hull" d="M32 82c-7-8-12-20-12-34V16c0-7 5-12 12-12s12 5 12 12v32c0 14-5 26-12 34z"/><path class="car-glass" d="M27 56c2 7 3 10 5 13 2-3 3-6 5-13z"/><path class="car-jets" d="M25 2h5M34 2h5"/></svg><span class="car-letter" aria-hidden="true">E</span></button>
+              <button class="car" type="button" data-car="5" aria-label="Track F: bring it to the front"><svg class="car-body" viewBox="0 0 64 84" aria-hidden="true" focusable="false"><path class="car-fins" d="M20 16 6 28v16l14-6zM44 16l14 12v16l-14-6z"/><path class="car-hull" d="M32 82c-7-8-12-20-12-34V16c0-7 5-12 12-12s12 5 12 12v32c0 14-5 26-12 34z"/><path class="car-glass" d="M27 56c2 7 3 10 5 13 2-3 3-6 5-13z"/><path class="car-jets" d="M25 2h5M34 2h5"/></svg><span class="car-letter" aria-hidden="true">F</span></button>
+            </div>
+          </div>
+
+          <div class="race-panel">
+            <div class="race-progress" aria-hidden="true"></div>
+            <ul class="track-list">
+              <li class="track is-active" id="track-a" data-track="0" data-letter="A">
+                <p class="track-kicker"><span>Track A</span><span>01 / 06</span></p>
+                <h3 class="track-title">Track A <span class="tbc">Name TBA</span></h3>
+                <p class="track-desc">What this track covers will be announced with the call for research.</p>
+              </li>
+              <li class="track" id="track-b" data-track="1" data-letter="B">
+                <p class="track-kicker"><span>Track B</span><span>02 / 06</span></p>
+                <h3 class="track-title">Track B <span class="tbc">Name TBA</span></h3>
+                <p class="track-desc">What this track covers will be announced with the call for research.</p>
+              </li>
+              <li class="track" id="track-c" data-track="2" data-letter="C">
+                <p class="track-kicker"><span>Track C</span><span>03 / 06</span></p>
+                <h3 class="track-title">Track C <span class="tbc">Name TBA</span></h3>
+                <p class="track-desc">What this track covers will be announced with the call for research.</p>
+              </li>
+              <li class="track" id="track-d" data-track="3" data-letter="D">
+                <p class="track-kicker"><span>Track D</span><span>04 / 06</span></p>
+                <h3 class="track-title">Track D <span class="tbc">Name TBA</span></h3>
+                <p class="track-desc">What this track covers will be announced with the call for research.</p>
+              </li>
+              <li class="track" id="track-e" data-track="4" data-letter="E">
+                <p class="track-kicker"><span>Track E</span><span>05 / 06</span></p>
+                <h3 class="track-title">Track E <span class="tbc">Name TBA</span></h3>
+                <p class="track-desc">What this track covers will be announced with the call for research.</p>
+              </li>
+              <li class="track" id="track-f" data-track="5" data-letter="F">
+                <p class="track-kicker"><span>Track F</span><span>06 / 06</span></p>
+                <h3 class="track-title">Track F <span class="tbc">Name TBA</span></h3>
+                <p class="track-desc">What this track covers will be announced with the call for research.</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 IMPACT -->
     <section id="impact" class="section section--tint" aria-labelledby="impact-title">
       <div class="container">
         <div class="section-head">
-          <p class="section-num"><b>§ 03</b> — Impact</p>
+          <p class="section-num"><b>04</b> Impact</p>
           <h2 id="impact-title" class="section-title reveal">Why it <em>matters</em>.</h2>
           <p class="lede reveal" data-delay="1">A lot of student research never leaves the lab notebook. URTC gives it an audience, gives the people who did it a way to grow, and gives the field a look at what's coming.</p>
         </div>
@@ -413,11 +315,11 @@
       </div>
     </section>
 
-    <!-- 04 ESSENTIALS -->
+    <!-- 05 ESSENTIALS -->
     <section id="essentials" class="section" aria-labelledby="essentials-title">
       <div class="container">
         <div class="section-head">
-          <p class="section-num"><b>§ 04</b> — Essentials</p>
+          <p class="section-num"><b>05</b> Essentials</p>
           <h2 id="essentials-title" class="section-title reveal">The <em>details</em>, so far.</h2>
           <p class="lede reveal" data-delay="1">Anything marked <span class="tbc">Tentative</span> is still being finalized. Join the interest list and we'll email you when it's confirmed.</p>
         </div>
@@ -455,11 +357,11 @@
       </div>
     </section>
 
-    <!-- 05 WHAT'S NEXT (add new milestones here as phases launch) -->
+    <!-- 06 WHAT'S NEXT (add new milestones here as phases launch) -->
     <section id="roadmap" class="section section--tint" aria-labelledby="next-title">
       <div class="container">
         <div class="section-head">
-          <p class="section-num"><b>§ 05</b> — Roadmap</p>
+          <p class="section-num"><b>06</b> Roadmap</p>
           <h2 id="next-title" class="section-title reveal">What's <em>next</em>.</h2>
         </div>
         <ol class="roadmap reveal">
@@ -497,12 +399,12 @@
       </div>
     </section>
 
-    <!-- 06 INTEREST LIST (the "Attend" CTA points here) -->
-    <section id="interest" class="section on-dark" aria-labelledby="interest-title">
-      <svg class="band-art contours" viewBox="0 0 600 600" data-contours="91" data-rings="20" aria-hidden="true" focusable="false"></svg>
+    <!-- 07 INTEREST LIST (the "Attend" CTA points here) -->
+    <section id="interest" class="section on-dark" aria-labelledby="interest-title" data-ascii-host>
+      <canvas class="ascii" data-ascii="contour" data-seed="91" data-intensity="0.75" aria-hidden="true"></canvas>
       <div class="container">
         <div class="section-head">
-          <p class="section-num"><b>§ 06</b> — Attend</p>
+          <p class="section-num"><b>07</b> Attend</p>
           <h2 id="interest-title" class="section-title">Be there for the <em>first one</em>.</h2>
           <p class="lede">Registration isn't open yet. Join the interest list and we'll email you when the call for research and registration open.</p>
         </div>
@@ -544,6 +446,7 @@
       <li><a href="#top">Home</a></li>
       <li><a href="#mission">Mission</a></li>
       <li><a href="#format">Format</a></li>
+      <li><a href="#tracks">Tracks</a></li>
       <li><a href="#impact">Impact</a></li>
       <li><a href="#essentials">Details</a></li>
       <li><a href="#roadmap">Roadmap</a></li>
@@ -556,7 +459,7 @@
   <footer class="site-footer">
     <div class="container">
       <div class="footer-top">
-        <p class="footer-mark" aria-hidden="true">Stanford URTC<span>.</span></p>
+        <p class="footer-mark">Stanford Undergraduate Research Technology <em>Conference</em></p>
         <div class="footer-col">
           <h2>Conference</h2>
           <ul>

@@ -5,14 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sponsors · Stanford URTC 2027</title>
   <meta name="description" content="Partner with Stanford URTC, a student-run undergraduate research conference.">
-  <meta name="theme-color" content="#0a0a0b">
+  <meta name="theme-color" content="#0c0b0b">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500&display=swap">
   <link rel="stylesheet" href="assets/css/styles.css">
   <script src="assets/js/config.js" defer></script>
   <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/ascii.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -21,7 +22,7 @@
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="index.html" aria-label="Stanford URTC home">
-        <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false"><circle cx="20" cy="20" r="18.25" stroke="currentColor" stroke-width="1.5"/><path d="M2.6 25.2 9.6 19.4l4 2.9 7.2-8.9 6.1 7.3 3-2.3 7.5 6.6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M4.5 29.5h31" stroke="currentColor" stroke-dasharray="1.5 2.5"/><circle cx="20.8" cy="7.6" r="2.6" fill="#e06a5f"/></svg>
+        <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false"><circle cx="20" cy="20" r="18.25" stroke="currentColor" stroke-width="1.5"/><path d="M2.6 25.2 9.6 19.4l4 2.9 7.2-8.9 6.1 7.3 3-2.3 7.5 6.6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M4.5 29.5h31" stroke="currentColor" stroke-dasharray="1.5 2.5"/><circle cx="20.8" cy="7.6" r="2.6" fill="#f0464b"/></svg>
         <span class="brand-name">Stanford <strong>URTC</strong></span>
       </a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
@@ -41,8 +42,8 @@
   </header>
 
   <main id="main">
-    <section class="page-hero graph-paper" aria-labelledby="page-title">
-      <svg class="page-art contours" viewBox="0 0 600 600" data-contours="58" data-rings="16" aria-hidden="true" focusable="false"></svg>
+    <section class="page-hero" aria-labelledby="page-title" data-ascii-host>
+      <canvas class="ascii" data-ascii="contour" data-seed="58" aria-hidden="true"></canvas>
       <div class="container">
         <p class="eyebrow"><span>Sponsors</span><span>Partnerships · 2027</span></p>
         <h1 id="page-title" class="page-title">Back the <em>next frontier</em>.</h1>
@@ -53,7 +54,7 @@
     <section class="section section--flush-top" aria-labelledby="what-title">
       <div class="container">
         <div class="section-head">
-          <p class="section-num"><b>§ 01</b> — What is URTC</p>
+          <p class="section-num"><b>01</b> What is URTC</p>
           <h2 id="what-title" class="section-title reveal">Research, <em>presented by students</em>.</h2>
         </div>
         <div class="split">
@@ -73,7 +74,7 @@
     <section class="section section--tint" aria-labelledby="why-title">
       <div class="container">
         <div class="section-head">
-          <p class="section-num"><b>§ 02</b> — Why partner with us</p>
+          <p class="section-num"><b>02</b> Why partner with us</p>
           <h2 id="why-title" class="section-title reveal">Where the research <em>starts</em>.</h2>
         </div>
         <ul class="fig-grid reveal">
@@ -109,7 +110,7 @@
     <section class="section" aria-labelledby="funds-title">
       <div class="container">
         <div class="section-head">
-          <p class="section-num"><b>§ 03</b> — Your support</p>
+          <p class="section-num"><b>03</b> Your support</p>
           <h2 id="funds-title" class="section-title reveal">Where it <em>goes</em>.</h2>
         </div>
         <div class="split">
@@ -128,7 +129,7 @@
     <section class="section section--tint" aria-labelledby="tiers-title">
       <div class="container">
         <div class="section-head">
-          <p class="section-num"><b>§ 04</b> — Sponsorship tiers</p>
+          <p class="section-num"><b>04</b> Sponsorship tiers</p>
           <h2 id="tiers-title" class="section-title reveal">Choose a <em>tier</em>.</h2>
           <p class="lede reveal" data-delay="1">Draft tiers. Benefits and pricing are being finalized. Contact us for the sponsorship packet.</p>
         </div>
@@ -159,11 +160,11 @@
         </div>
       </div>
     </section>
-    <section class="section on-dark" aria-labelledby="talk-title">
-      <svg class="band-art contours" viewBox="0 0 600 600" data-contours="13" data-rings="20" aria-hidden="true" focusable="false"></svg>
+    <section class="section on-dark" aria-labelledby="talk-title" data-ascii-host>
+      <canvas class="ascii" data-ascii="contour" data-seed="13" data-intensity="0.75" aria-hidden="true"></canvas>
       <div class="container">
         <div class="section-head">
-          <p class="section-num"><b>§ 05</b> — Contact</p>
+          <p class="section-num"><b>05</b> Contact</p>
           <h2 id="talk-title" class="section-title reveal">Let's <em>talk</em>.</h2>
           <p class="lede reveal" data-delay="1">Email the sponsorship team for the sponsorship packet, or with any questions.</p>
         </div>
@@ -181,7 +182,7 @@
   <footer class="site-footer">
     <div class="container">
       <div class="footer-top">
-        <p class="footer-mark" aria-hidden="true">Stanford URTC<span>.</span></p>
+        <p class="footer-mark">Stanford Undergraduate Research Technology <em>Conference</em></p>
         <div class="footer-col">
           <h2>Conference</h2>
           <ul>

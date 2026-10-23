@@ -5,14 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Call for Research · Stanford URTC 2027</title>
   <meta name="description" content="Formats, eligibility and dates for presenting at Stanford URTC 2027.">
-  <meta name="theme-color" content="#0a0a0b">
+  <meta name="theme-color" content="#0c0b0b">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,500;1,600&family=IBM+Plex+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500&display=swap">
   <link rel="stylesheet" href="assets/css/styles.css">
   <script src="assets/js/config.js" defer></script>
   <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/ascii.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -21,7 +22,7 @@
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="index.html" aria-label="Stanford URTC home">
-        <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false"><circle cx="20" cy="20" r="18.25" stroke="currentColor" stroke-width="1.5"/><path d="M2.6 25.2 9.6 19.4l4 2.9 7.2-8.9 6.1 7.3 3-2.3 7.5 6.6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M4.5 29.5h31" stroke="currentColor" stroke-dasharray="1.5 2.5"/><circle cx="20.8" cy="7.6" r="2.6" fill="#e06a5f"/></svg>
+        <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true" focusable="false"><circle cx="20" cy="20" r="18.25" stroke="currentColor" stroke-width="1.5"/><path d="M2.6 25.2 9.6 19.4l4 2.9 7.2-8.9 6.1 7.3 3-2.3 7.5 6.6" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M4.5 29.5h31" stroke="currentColor" stroke-dasharray="1.5 2.5"/><circle cx="20.8" cy="7.6" r="2.6" fill="#f0464b"/></svg>
         <span class="brand-name">Stanford <strong>URTC</strong></span>
       </a>
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
@@ -41,8 +42,8 @@
   </header>
 
   <main id="main">
-    <section class="page-hero graph-paper" aria-labelledby="page-title">
-      <svg class="page-art contours" viewBox="0 0 600 600" data-contours="41" data-rings="16" aria-hidden="true" focusable="false"></svg>
+    <section class="page-hero" aria-labelledby="page-title" data-ascii-host>
+      <canvas class="ascii" data-ascii="contour" data-seed="41" aria-hidden="true"></canvas>
       <div class="container">
         <p class="eyebrow"><span>Call for Research</span><span>Opening soon</span></p>
         <h1 id="page-title" class="page-title">Bring your <em>frontier</em>.</h1>
@@ -53,7 +54,7 @@
     <section class="section section--flush-top" aria-labelledby="dates-title">
       <div class="container">
         <div class="section-head">
-          <p class="section-num"><b>§ 01</b> — Key dates</p>
+          <p class="section-num"><b>01</b> Key dates</p>
           <h2 id="dates-title" class="section-title reveal">Important <em>dates</em>.</h2>
         </div>
         <dl class="spec reveal">
@@ -73,7 +74,7 @@
     <section id="eligibility" class="section section--tint" aria-labelledby="elig-title">
       <div class="container">
         <div class="section-head">
-          <p class="section-num"><b>§ 02</b> — Eligibility</p>
+          <p class="section-num"><b>02</b> Eligibility</p>
           <h2 id="elig-title" class="section-title reveal">Who can <em>submit</em>.</h2>
         </div>
         <div class="table-wrap reveal" role="region" aria-labelledby="elig-title" tabindex="0">
@@ -107,9 +108,9 @@
     <section class="section" aria-labelledby="formats-title">
       <div class="container">
         <div class="section-head">
-          <p class="section-num"><b>§ 03</b> — Formats</p>
+          <p class="section-num"><b>03</b> Formats</p>
           <h2 id="formats-title" class="section-title reveal">Format <em>requirements</em>.</h2>
-          <p class="lede reveal" data-delay="1">Every submission must align with one of the conference tracks. Tracks: <span class="tbc">TBD</span></p>
+          <p class="lede reveal" data-delay="1">Every submission must align with one of the six conference tracks. Track names and topics will be announced with the call.</p>
         </div>
         <ul class="card-grid">
           <li class="card reveal">
@@ -143,13 +144,22 @@
             </ul>
           </li>
         </ul>
+        <!-- The six tracks. Each links to its place in the homepage race. Update names here and on index.html. -->
+        <ul class="track-chips mt-lg reveal" aria-label="Conference tracks">
+          <li><a href="index.html#track-a"><span class="tower-badge">A</span>Track A<span class="tbc">TBA</span></a></li>
+          <li><a href="index.html#track-b"><span class="tower-badge">B</span>Track B<span class="tbc">TBA</span></a></li>
+          <li><a href="index.html#track-c"><span class="tower-badge">C</span>Track C<span class="tbc">TBA</span></a></li>
+          <li><a href="index.html#track-d"><span class="tower-badge">D</span>Track D<span class="tbc">TBA</span></a></li>
+          <li><a href="index.html#track-e"><span class="tower-badge">E</span>Track E<span class="tbc">TBA</span></a></li>
+          <li><a href="index.html#track-f"><span class="tower-badge">F</span>Track F<span class="tbc">TBA</span></a></li>
+        </ul>
       </div>
     </section>
 
     <section class="section section--tint" aria-labelledby="review-title">
       <div class="container">
         <div class="section-head">
-          <p class="section-num"><b>§ 04</b> — Review</p>
+          <p class="section-num"><b>04</b> Review</p>
           <h2 id="review-title" class="section-title reveal">Review &amp; <em>originality</em>.</h2>
         </div>
         <div class="split">
@@ -167,7 +177,7 @@
     <section class="section" aria-labelledby="present-title">
       <div class="container">
         <div class="section-head">
-          <p class="section-num"><b>§ 05</b> — At the conference</p>
+          <p class="section-num"><b>05</b> At the conference</p>
           <h2 id="present-title" class="section-title reveal">Presenting your <em>work</em>.</h2>
         </div>
         <div class="split">
@@ -188,7 +198,7 @@
   <footer class="site-footer">
     <div class="container">
       <div class="footer-top">
-        <p class="footer-mark" aria-hidden="true">Stanford URTC<span>.</span></p>
+        <p class="footer-mark">Stanford Undergraduate Research Technology <em>Conference</em></p>
         <div class="footer-col">
           <h2>Conference</h2>
           <ul>
