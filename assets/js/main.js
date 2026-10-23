@@ -150,8 +150,11 @@
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
-          entry.target.classList.add("is-visible");
-          io.unobserve(entry.target);
+          var el = entry.target;
+          el.classList.add("is-visible");
+          // Once the entrance has played, drop its staggered delays so hovers respond at once
+          setTimeout(function () { el.classList.add("is-settled"); }, 1600);
+          io.unobserve(el);
         }
       });
     }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });

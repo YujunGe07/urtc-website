@@ -5,7 +5,8 @@
    Scenes
      terrain   Ridgelines rolling toward you across a valley (homepage hero)
      contour   A top-down topographic map drawn with - | / \ (page heroes, bands)
-     race      Six tracks racing down the screen, driven by scroll (homepage)
+     race      The tracks racing down the screen, driven by scroll (homepage)
+     poster    A poster session: posters with live charts, presenters, visitors (homepage)
 
    Canvas attributes
      data-seed="23"          Any number gives a different landscape
@@ -16,7 +17,9 @@
      data-intensity="0.7"    Overall brightness, 0–1
 
    The host is the closest [data-ascii-host]. Inside it:
-     [data-ascii-horizon]    Terrain only: the horizon sits inside this element
+     [data-ascii-horizon]    Terrain only: the horizon sits inside this element, and the
+                             landscape never rises above its top edge (so it stays clear of
+                             whatever sits above it, like the wordmark)
 
    The race reads its section, [data-race]:
      [data-race-stage]       The tall element that scrolling moves through (gets .is-live)
@@ -36,7 +39,7 @@
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var MONO = '"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace';
-  var IDLE_MS = { terrain: 0, contour: 33, race: 33 };   // frame spacing when nothing is moving it
+  var IDLE_MS = { terrain: 0, contour: 33, race: 33, poster: 50 };   // frame spacing when nothing is moving it
   var WAKE = 9;            // points in the pointer's wake
   var WAKE_MS = 45;        // a new point every this many ms
   var WAKE_PX = 70;        // reach of each point
@@ -209,8 +212,10 @@
   };
 
   Field.prototype.measureHorizon = function () {
+    this.ceiling = -1;
     if (!this.horizonEl) return horizonFor(this.w, this.h);
     var box = this.canvas.getBoundingClientRect(), r = this.horizonEl.getBoundingClientRect();
+    this.ceiling = (r.top - box.top) / this.ch;
     return clamp((r.top + r.height * 0.62 - box.top) / this.h, 0.25, 0.8);
   };
 
@@ -388,6 +393,7 @@
     this.acc.fill(0);
     if (this.scene === "terrain") this.terrain();
     else if (this.scene === "race") this.raceScene();
+    else if (this.scene === "poster") this.posterScene();
     else this.contour();
     this.post();
     this.render();
@@ -532,6 +538,103 @@
           }
         }
       }
+    }
+
+    // Nothing rises past the ceiling: peaks fade out a few rows below it, like haze
+    if (this.ceiling > 0) {
+      var top = this.ceiling, lastRow = Math.min(rows, Math.ceil(top + 6));
+      for (r = 0; r < lastRow; r++) {
+        var keep = smooth(top, top + 6, r);
+        for (c = 0, i = r * cols; c < cols; c++, i++) {
+          if (keep <= 0) chars[i] = SPACE;
+          else bright[i] *= keep;
+        }
+      }
+    }
+  };
+
+  /* Scene: a poster session ----------------------------------------------- */
+  // Posters on stands, their charts always updating; a presenter beside each one
+  // gestures while visitors wander the floor and stop to read.
+  Field.prototype.posterScene = function () {
+    var cols = this.cols, rows = this.rows;
+    var chars = this.chars, bright = this.bright, acc = this.acc;
+    var n = this.noise, t = this.t, tick = this.tick;
+    var put = function (c, r, code, b, a) {
+      if (c < 0 || c >= cols || r < 0 || r >= rows) return;
+      var i = r * cols + c;
+      chars[i] = code;
+      bright[i] = b;
+      acc[i] = a || 0;
+    };
+    var text = function (c, r, str, b, a) {
+      for (var q = 0; q < str.length; q++) put(c + q, r, str.charCodeAt(q), b, a);
+    };
+    var count = cols >= 96 ? 3 : cols >= 56 ? 2 : 1;
+    var gapCols = 6;
+    var pw = Math.floor((cols - 4 - (count - 1) * gapCols) / count);
+    var floor = rows - 2;
+    var top = 1, ph = Math.max(8, Math.min(floor - 5, Math.round(rows * 0.64)));
+    var k, r, c, x0;
+
+    // The floor
+    for (c = 0; c < cols; c++) put(c, floor, (c + (tick >> 4)) % 3 ? DOT : UNDER, 0.16);
+
+    for (k = 0; k < count; k++) {
+      x0 = 2 + k * (pw + gapCols);
+      var x1 = x0 + pw - 1, y1 = top + ph - 1;
+      // Frame and stand
+      for (c = x0; c <= x1; c++) { put(c, top, DASH, 0.5); put(c, y1, DASH, 0.5); }
+      for (r = top; r <= y1; r++) { put(x0, r, BAR, 0.5); put(x1, r, BAR, 0.5); }
+      put(x0, top, 43, 0.6); put(x1, top, 43, 0.6); put(x0, y1, 43, 0.6); put(x1, y1, 43, 0.6);
+      for (r = y1 + 1; r < floor; r++) { put(x0 + 3, r, BAR, 0.3); put(x1 - 3, r, BAR, 0.3); }
+      // Title bar and authors
+      for (c = x0 + 2; c <= x1 - 2; c++) put(c, top + 1, EQUALS, 0.85, k === 1 ? 0.9 : 0);
+      for (c = x0 + 2; c < x0 + 2 + Math.floor(pw * 0.45); c++) put(c, top + 2, DASH, 0.35);
+      // Body: a column of text on the left, a live chart on the right
+      var mid = x0 + Math.floor(pw * 0.45);
+      for (r = top + 4; r < y1 - 1; r += 1) {
+        var len = Math.floor((mid - x0 - 4) * (0.55 + 0.45 * hash(r, k + 3)));
+        for (c = x0 + 2; c < x0 + 2 + len; c++) put(c, r, hash(c, r * 7 + k) < 0.18 ? SPACE : COLON, 0.22);
+      }
+      var cx0 = mid + 2, cx1 = x1 - 2, cb = y1 - 2, chH = Math.max(3, cb - (top + 4));
+      if (k % 2 === 0) {
+        // Bar chart, bars rising and settling as results come in
+        for (c = cx0; c <= cx1; c++) {
+          if ((c - cx0) % 3 === 2) continue;
+          var bar = Math.round(chH * (0.25 + 0.7 * n((c - cx0) * 0.35 + k * 9, t * 0.35)));
+          for (r = 0; r < bar; r++) put(c, cb - r, r === bar - 1 ? HASH : BAR, 0.5 + 0.4 * (r / chH), k === 0 && (c - cx0) % 9 < 2 ? 0.9 : 0);
+        }
+      } else {
+        // A line plot that keeps drawing itself across the axes
+        var drawn = ((t * 0.18 + k * 0.3) % 1.2) / 1.0;
+        for (c = cx0; c <= cx1; c++) put(c, cb, DASH, 0.3);
+        for (r = cb - chH + 1; r <= cb; r++) put(cx0, r, BAR, 0.3);
+        for (c = cx0 + 1; c <= cx1; c++) {
+          var f = (c - cx0) / (cx1 - cx0);
+          if (f > drawn) break;
+          var yv = cb - 1 - Math.round((chH - 2) * (0.2 + 0.6 * f + 0.15 * Math.sin(f * 9 + k)));
+          put(c, yv, f > drawn - 0.04 ? 42 : DOT, 0.9, 0.9);
+        }
+      }
+      // The presenter, beside the poster, mid-explanation
+      var px = x1 + 2, wave = (tick >> 3) % 4;
+      if (px < cols - 1) {
+        put(px, floor - 3, 111, 0.8);
+        put(px, floor - 2, wave === 1 ? SLASH : wave === 3 ? BACK : BAR, 0.7);
+        put(px - 1, floor - 2, wave === 2 ? 60 : SPACE, 0.6);
+        put(px, floor - 1, 94, 0.6);
+      }
+    }
+
+    // Visitors wander the floor and pause in front of the posters
+    var people = Math.max(2, Math.round(cols / 18));
+    for (k = 0; k < people; k++) {
+      var wander = n(t * 0.05 + k * 13.1, k * 3.3);
+      var x = Math.round(2 + (cols - 5) * clamp((wander - 0.2) / 0.6, 0, 1));
+      var you = k === 0;
+      put(x, floor - 2, 111, you ? 1 : 0.62, you ? 1 : 0);
+      put(x, floor - 1, (tick + k * 5) % 16 < 8 ? 65 : 72, you ? 0.9 : 0.5, you ? 0.9 : 0);
     }
   };
 
@@ -741,7 +844,6 @@
   /* so leaders hand over naturally: the next craft climbs through, the last */
   /* one eases back. At the finish they all punch through the frontier.      */
   /* ---------------------------------------------------------------------- */
-  var FINISH = 6 / 7;      // the stage's last stretch is the finish: the field punches through the frontier
   var LEADER_AT = 0.4;     // where the camera keeps the leader, as a fraction of the screen from the top
   var LEAD = 0.26;         // how far the leader runs ahead of the back of the field, in screens
   var SPREAD = 0.95;       // how many sectors a craft's run toward the front lasts
@@ -755,6 +857,7 @@
     this.cars = slice(this.section.querySelectorAll("[data-car]"));
     this.items = slice(this.section.querySelectorAll("[data-track]"));
     this.n = Math.max(1, this.cars.length);
+    this.finish = this.n / (this.n + 1);  // one sector per track, then the finish: the field punches through the frontier
     this.s = new Float64Array(this.n);    // where each craft is, in rows travelled
     this.o = new Float64Array(this.n);    // how far each is ahead of the back of the field
     this.e = new Float64Array(this.n);    // extra screen offset: running off at the finish, or dropping back in
@@ -813,7 +916,7 @@
     var before = this.p;
     var html = document.documentElement, behavior = html.style.scrollBehavior;
     html.style.scrollBehavior = "auto";
-    window.scrollTo(0, window.scrollY + r.top + total * FINISH * ((i + 0.5) / this.n));
+    window.scrollTo(0, window.scrollY + r.top + total * this.finish * ((i + 0.5) / this.n));
     html.style.scrollBehavior = behavior;
     this.read();
     this.p = this.target;
@@ -832,7 +935,7 @@
     var base = this.p * this.distance + this.shift + this.cruise;
 
     // Each craft's goal: near the front in and around its own sector, falling back gradually after
-    var racing = clamp(this.p / FINISH, 0, 1);
+    var racing = clamp(this.p / this.finish, 0, 1);
     var focus = racing * n, ease = 1 - Math.exp(-dt / this.lag);
     this.lag += (SETTLE_MS - this.lag) * (1 - Math.exp(-dt / 1600));
     var best = 0;
@@ -852,7 +955,7 @@
     // The finish: past the last sector the field punches through and runs off the bottom,
     // leader first. Once it's gone it stays gone, and scrolling back up out of the finish
     // brings it back in from the top rather than reversing it.
-    var fin = clamp((this.p - FINISH) / (1 - FINISH), 0, 1);
+    var fin = clamp((this.p - this.finish) / (1 - this.finish), 0, 1);
     if (fin > 0.6) this.gone = true;
     if (fin === 0 && this.gone) { this.gone = false; this.entry = 1; }
     var away = this.gone || fin > 0.45;
