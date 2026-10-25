@@ -4,8 +4,11 @@
    - Fills links/text from config.js
    - Interest-list form
    - Header backdrop once the page scrolls
+   - Smooth scrolling (Lenis) and scroll-driven animation (GSAP + ScrollTrigger)
    - Scroll reveals, and mono labels that decode like a terminal
    The ASCII art lives in ascii.js.
+   Lenis and GSAP load from a CDN; if they don't arrive, every effect falls back
+   to plain scrolling and the simpler built-in versions below.
    Everything decorative respects prefers-reduced-motion.
    ========================================================================== */
 (function () {
@@ -16,6 +19,49 @@
 
   var cfg = window.URTC_CONFIG || {};
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  var gsap = window.gsap, ScrollTrigger = window.ScrollTrigger;
+
+  // GSAP drives the scroll animations whenever it's here and motion is welcome
+  var motion = !reduceMotion && !!gsap && !!ScrollTrigger;
+  if (motion) {
+    gsap.registerPlugin(ScrollTrigger);
+    root.classList.add("has-gsap");
+  }
+
+  /* Smooth scrolling. Lenis eases the page toward where the wheel or trackpad sends it;
+     with GSAP present it runs on GSAP's clock so ScrollTrigger sees every frame. */
+  var lenis = null;
+  // The tracks race is many screens tall, so it scrolls a little quicker than the rest of the page,
+  // and quicker still the faster you're going: a hard flick carries you through it
+  var raceStage = document.querySelector("[data-race-stage]");
+  var inRace = function () {
+    if (!raceStage) return false;
+    var r = raceStage.getBoundingClientRect(), mid = window.innerHeight / 2;
+    return r.top < mid && r.bottom > mid;
+  };
+  if (window.Lenis && !reduceMotion) {
+    lenis = new window.Lenis({
+      lerp: 0.13,             // how quickly the page catches up to the wheel (higher is snappier)
+      wheelMultiplier: 1.1,   // how far each wheel or trackpad flick travels
+      autoRaf: !motion,
+      anchors: { offset: -80 },  // in-page links land just below the header
+      virtualScroll: function (data) {
+        if (inRace()) {
+          var speed = Math.min(1, Math.max(0, (Math.abs(lenis.velocity) - 15) / 45));
+          data.deltaY *= 1.1 + 0.4 * speed;   // 1.1x at a stroll, up to 1.5x when scrolling fast
+        }
+        return true;
+      }
+    });
+    if (motion) {
+      lenis.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
+      gsap.ticker.lagSmoothing(0);
+    }
+  }
+  // Shared with ascii.js, so the race can jump without fighting the smooth scroll
+  window.URTC = { lenis: lenis };
 
   /* Header gets its backdrop once the page has scrolled */
   var onScroll = function () { root.classList.toggle("is-scrolled", window.scrollY > 8); };
@@ -34,7 +80,9 @@
       toggle.querySelector(".nav-toggle-label").textContent = open ? "Close" : "Menu";
       nav.classList.toggle("is-open", open);
       document.body.classList.toggle("nav-open", open);
+      if (lenis) { if (open) lenis.stop(); else lenis.start(); }
     };
+    nav.setAttribute("data-lenis-prevent", "");   // the open menu scrolls on its own
     toggle.addEventListener("click", function () {
       setOpen(toggle.getAttribute("aria-expanded") !== "true");
     });
@@ -144,7 +192,38 @@
   /* Scroll reveals                                                          */
   /* ---------------------------------------------------------------------- */
   var reveals = document.querySelectorAll(".reveal");
-  if (reduceMotion || !("IntersectionObserver" in window)) {
+  var settle = function (els) {
+    gsap.set(els, { clearProps: "opacity,transform" });
+    els.forEach(function (el) { el.classList.add("is-visible", "is-settled"); });
+  };
+  if (motion) {
+    // Figure grids rise tile by tile, and their icons draw themselves in
+    document.querySelectorAll(".fig-grid.reveal").forEach(function (grid) {
+      var tiles = Array.prototype.slice.call(grid.children);
+      ScrollTrigger.create({
+        trigger: grid,
+        start: "top 88%",
+        once: true,
+        onEnter: function () {
+          gsap.to(tiles, {
+            opacity: 1, y: 0, duration: 1.2, ease: "expo.out", stagger: 0.09,
+            onComplete: function () { settle(tiles); settle([grid]); }
+          });
+          gsap.to(grid.querySelectorAll(".fig-icon > *"), { strokeDashoffset: 0, duration: 1.8, ease: "power2.inOut", stagger: 0.04, delay: 0.3 });
+        }
+      });
+    });
+    ScrollTrigger.batch(document.querySelectorAll(".reveal:not(.fig-grid)"), {
+      start: "top 92%",
+      once: true,
+      onEnter: function (batch) {
+        gsap.to(batch, {
+          opacity: 1, y: 0, duration: 1.1, ease: "expo.out", stagger: 0.08,
+          onComplete: function () { settle(batch); }
+        });
+      }
+    });
+  } else if (reduceMotion || !("IntersectionObserver" in window)) {
     reveals.forEach(function (n) { n.classList.add("is-visible"); });
   } else {
     var io = new IntersectionObserver(function (entries) {
@@ -211,15 +290,32 @@
     }, { threshold: 0.6 });
     document.querySelectorAll(".section-num, .eyebrow, .hero-meta").forEach(function (n) { decodeIO.observe(n); });
 
-    // Figures count in by spinning through digits
-    var statIO = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        decode(entry.target, DIGITS);
-        statIO.unobserve(entry.target);
+    if (motion) {
+      // Figures count up from zero (every number in them, so "100–150" counts both ends)
+      document.querySelectorAll(".stat-num").forEach(function (el) {
+        var text = el.textContent, count = { p: 0 };
+        var show = function () {
+          el.textContent = text.replace(/\d+/g, function (d) { return String(Math.round(+d * count.p)); });
+        };
+        show();
+        ScrollTrigger.create({
+          trigger: el,
+          start: "top 90%",
+          once: true,
+          onEnter: function () { gsap.to(count, { p: 1, duration: 1.8, ease: "power3.out", onUpdate: show }); }
+        });
       });
-    }, { threshold: 0.8 });
-    document.querySelectorAll(".stat-num").forEach(function (n) { statIO.observe(n); });
+    } else {
+      // Figures count in by spinning through digits
+      var statIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          decode(entry.target, DIGITS);
+          statIO.unobserve(entry.target);
+        });
+      }, { threshold: 0.8 });
+      document.querySelectorAll(".stat-num").forEach(function (n) { statIO.observe(n); });
+    }
   }
 
   /* ---------------------------------------------------------------------- */
@@ -256,6 +352,16 @@
       if (!words.length) return;
       el.classList.remove("reveal");   // the words do the entrance now
       el.classList.add("is-scrubbed");
+
+      if (motion) {
+        // Lit from when the top crosses 92% of the screen until a third of a screen later;
+        // scrub eases the words a beat behind the scroll, so they fade rather than flip
+        gsap.fromTo(words, { opacity: 0.12, filter: "blur(3px)" }, {
+          opacity: 1, filter: "blur(0px)", ease: "none", stagger: 0.12,
+          scrollTrigger: { trigger: el, start: "top 92%", end: "top 60%", scrub: 0.6 }
+        });
+        return;
+      }
 
       var ticking = false;
       var update = function () {
@@ -355,25 +461,33 @@
   /* Cursor: a dot that opens into a ring over anything you can click.       */
   /* Mouse only; touch and pens keep the system's own pointer.               */
   /* ---------------------------------------------------------------------- */
-  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+  if (finePointer) {
     var cursor = document.createElement("div");
     var CLICKABLE = "a, button, summary, label, select, [role='button'], [tabindex]:not([tabindex='-1'])";
     var TYPING = "input, textarea, [contenteditable='true']";
     var cursorX = 0, cursorY = 0, cursorRaf = null;
     cursor.className = "cursor is-off";
     cursor.setAttribute("aria-hidden", "true");
+    cursor.innerHTML = '<span class="cursor-ring"></span><span class="cursor-dot"></span>';
     document.body.appendChild(cursor);
     root.classList.add("has-cursor");
+    var dot = cursor.querySelector(".cursor-dot"), ring = cursor.querySelector(".cursor-ring");
+    // With GSAP the ring glides after the dot; without it, both sit on the pointer
+    var ringX = motion ? gsap.quickTo(ring, "x", { duration: 0.35, ease: "power3.out" }) : null;
+    var ringY = motion ? gsap.quickTo(ring, "y", { duration: 0.35, ease: "power3.out" }) : null;
 
     var place = function () {
       cursorRaf = null;
-      cursor.style.transform = "translate3d(" + cursorX + "px, " + cursorY + "px, 0)";
+      dot.style.transform = "translate3d(" + cursorX + "px, " + cursorY + "px, 0)";
+      if (ringX) { ringX(cursorX); ringY(cursorY); }
+      else ring.style.transform = dot.style.transform;
     };
     document.addEventListener("pointermove", function (e) {
       if (e.pointerType !== "mouse") return;
       var t = e.target;
       cursorX = e.clientX;
       cursorY = e.clientY;
+      if (cursor.classList.contains("is-off") && ringX) gsap.set(ring, { x: cursorX, y: cursorY });
       cursor.classList.remove("is-off");
       cursor.classList.toggle("is-hover", !!(t.closest && t.closest(CLICKABLE)));
       cursor.classList.toggle("is-text", !!(t.closest && t.closest(TYPING)));
@@ -383,6 +497,63 @@
     document.addEventListener("pointerup", function () { cursor.classList.remove("is-down"); });
     document.documentElement.addEventListener("mouseleave", function () { cursor.classList.add("is-off"); });
     window.addEventListener("blur", function () { cursor.classList.add("is-off"); });
+  }
+
+  /* ---------------------------------------------------------------------- */
+  /* GSAP-only polish                                                        */
+  /* ---------------------------------------------------------------------- */
+  if (motion) {
+    // The hero comes in as one piece: meta, wordmark out of a blur, tagline, then the details
+    var hero = document.querySelector(".hero");
+    if (hero) {
+      gsap.timeline({ defaults: { ease: "expo.out", duration: 1.4 } })
+        .from(".hero-meta", { y: 14, opacity: 0, duration: 1 }, 0.1)
+        .from(".hero-wordmark", { yPercent: 16, opacity: 0, filter: "blur(14px)", duration: 1.7 }, 0.15)
+        .from(".hero-tagline", { y: 24, opacity: 0 }, 0.5)
+        .from(".hero-foot > *", { y: 16, opacity: 0, stagger: 0.1 }, 0.65);
+      // ...and drifts up and dims as you scroll past it
+      gsap.to(".hero-inner", {
+        yPercent: -10, opacity: 0.3, ease: "none",
+        scrollTrigger: { trigger: hero, start: "top top", end: "bottom top", scrub: true }
+      });
+    }
+    // Page heroes drift the same way
+    document.querySelectorAll(".page-hero > .container").forEach(function (copy) {
+      gsap.to(copy, {
+        yPercent: -12, opacity: 0.35, ease: "none",
+        scrollTrigger: { trigger: copy.parentNode, start: "top top", end: "bottom top", scrub: true }
+      });
+    });
+
+    // The ticker runs on GSAP's clock and picks up speed while you scroll
+    var tickerTrack = document.querySelector(".ticker-track");
+    if (tickerTrack) {
+      tickerTrack.style.animation = "none";
+      var ticker = gsap.to(tickerTrack, { xPercent: -50, duration: 80, ease: "none", repeat: -1 });
+      if (lenis) {
+        lenis.on("scroll", function (e) {
+          gsap.to(ticker, { timeScale: 1 + Math.min(6, Math.abs(e.velocity) * 0.25), duration: 0.25, overwrite: true });
+          gsap.to(ticker, { timeScale: 1, duration: 1.4, delay: 0.3, ease: "power2.out" });
+        });
+      }
+    }
+
+    // Buttons lean a little toward the pointer
+    if (finePointer) {
+      document.querySelectorAll(".btn").forEach(function (btn) {
+        var xTo = gsap.quickTo(btn, "x", { duration: 0.5, ease: "power3.out" });
+        var yTo = gsap.quickTo(btn, "y", { duration: 0.5, ease: "power3.out" });
+        btn.addEventListener("pointermove", function (e) {
+          var r = btn.getBoundingClientRect();
+          xTo((e.clientX - r.left - r.width / 2) * 0.18);
+          yTo((e.clientY - r.top - r.height / 2) * 0.3);
+        });
+        btn.addEventListener("pointerleave", function () { xTo(0); yTo(0); });
+      });
+    }
+
+    // Fonts and the ASCII canvases can shift the layout a little after load
+    window.addEventListener("load", function () { ScrollTrigger.refresh(); });
   }
 
   /* Footer year */

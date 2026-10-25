@@ -2,7 +2,7 @@
 
 Website for the Stanford Undergraduate Research Technology Conference (URTC) 2027, with the theme **Frontiers**.
 
-The site is plain HTML, CSS and JavaScript. There's no build step, framework or package install. Any static host works: GitHub Pages, Netlify, Vercel, or Stanford web hosting.
+The site is plain HTML, CSS and JavaScript. There's no build step, framework or package install. Any static host works: GitHub Pages, Netlify, Vercel, or Stanford web hosting. Two animation libraries load from a CDN (see [Libraries](#libraries)); the site still works if they don't.
 
 ## Preview locally
 
@@ -111,6 +111,27 @@ Any `<canvas data-ascii="…">` is drawn as a live field of characters. Put it i
 
 In the hero, `.hero-horizon` (`data-ascii-horizon`) marks where the ridgelines' horizon sits, between the wordmark and the details. The hero fills exactly one screen; its type scales with the screen's height so everything fits. Page heroes and dark bands fade their map out behind the copy with a CSS mask, not boxes.
 
+## Libraries
+
+Two libraries load from jsDelivr in every page's `<head>`, before `main.js`. Each is pinned to an exact version and carries an `integrity` hash, so the browser refuses a file that has been changed.
+
+| Library | Version | What it does here |
+|---|---|---|
+| [Lenis](https://github.com/darkroomengineering/lenis) | 1.3.26 | Smooth scrolling: the page eases toward where the wheel or trackpad sends it. In-page links (like **Attend**) glide to their section, landing below the header. It's paused while the mobile menu is open. |
+| [GSAP](https://github.com/greensock/GSAP) + ScrollTrigger | 3.15.0 | The hero entrance, and the hero and page-hero copy drifting away as you scroll. Section headings lighting up word by word (scrubbed to the scroll), tiles and reveals rising in with a stagger, format icons drawing in, and stats counting up. Also the ticker speeding up while you scroll, the cursor ring trailing the dot, and buttons leaning toward the pointer. |
+
+`main.js` sets them up and runs Lenis on GSAP's clock, so ScrollTrigger sees every frame. It also shares the Lenis instance as `window.URTC.lenis`, which the tracks race uses to jump between sectors without the smooth scroll gliding back. With "reduce motion" on, neither runs.
+
+**If they fail to load** (offline, or a blocked CDN), nothing breaks. Scrolling is native, and the built-in fallbacks in `main.js` take over: IntersectionObserver reveals, the class-based heading reveal, and figures that spin through digits.
+
+**To upgrade**, change the version in all three `<script>` tags on every page (and `templates/page-template.html`), then replace each `integrity` value with the new file's hash:
+
+```bash
+curl -s https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js | openssl dgst -sha384 -binary | openssl base64 -A
+```
+
+Prefix the output with `sha384-`. Pick a release that's been out for a couple of weeks.
+
 ## Design notes
 
 Experimental, dark and technical: the site reads like an instrument drawing a landscape in characters. All artwork is original and generated in the browser.
@@ -122,7 +143,7 @@ Experimental, dark and technical: the site reads like an instrument drawing a la
 - **Atmosphere:** film grain over the whole site, cardinal haze behind the art, and solid cardinal accents: script words, figures and the primary buttons. Glass buttons and panels lift off the art instead of sitting in black boxes. Cards and cells pick up a soft spotlight under the pointer.
 - **Pointer:** the cursor leaves a flowing wake rather than a circle: a ragged, comet-like trail that fades behind it. The wake drags ridgelines and contours along with its motion, lifts them toward its path, turns what it passes cardinal and reveals binary underneath. Its reach and strength are kept small and gentle; tune them with `WAKE`, `WAKE_MS` and `WAKE_PX` at the top of `ascii.js`.
 - **Cursor:** on a mouse, the system pointer is replaced by a small dot that opens into a ring over anything clickable (links, buttons, the craft). Text fields keep the normal text cursor; touch screens and pens keep the system pointer. It lives in `main.js` and the `.cursor` rules in `styles.css`.
-- **Tracks race (homepage):** the scroll-driven moment, inspired by kprverse.com. The section is a tall stage with a sticky view: the race fills the screen, and five small craft (the tracks) race down it, seen from above. Each heads mostly straight down with a slight sway and leaves an ASCII trail at least five characters wide, with dust drifting past. Ahead of them is the frontier: a shock front bowed back on either side like a sonic boom, glowing at its apex, with pressure waves rippling back toward the field. The stage is split into one sector per track and then the finish, 60% of a screen of scrolling each. The field stays staggered, so the lead changes hands naturally: the next craft climbs through and the last leader eases back, and the field slowly closes on the frontier. The leader's trail burns cardinal, and its track's notes fill the open space below the frontier in large type, word by word. At the finish the field punches through the frontier, which flares, and runs right off the bottom of the screen, trails and all, while the notes clear; scrolling back up brings it back in from the top. Clicking a craft moves the page to that track's sector at once and lets it take the lead in place, without racing through the sectors in between. Links to `index.html#track-c` land on that sector too. Tune the feel with `LEADER_AT`, `LEAD`, `SPREAD`, `SETTLE_MS` and `HANDOFF_MS` in `ascii.js`.
+- **Tracks race (homepage):** the scroll-driven moment, inspired by kprverse.com. The section is a tall stage with a sticky view: the race fills the screen, and five small craft (the tracks) race down it, seen from above. Each heads mostly straight down with a slight sway and leaves an ASCII trail at least five characters wide, with dust drifting past. Ahead of them is the frontier: a shock front bowed back on either side like a sonic boom, glowing at its apex, with pressure waves rippling back toward the field. The stage is split into one sector per track and then the finish, 55% of a screen of scrolling each. With smooth scrolling on, the race also scrolls a little quicker than the rest of the page, and quicker still when you scroll fast (1.1x, up to 1.5x; see `virtualScroll` in `main.js`). The field stays staggered, so the lead changes hands naturally: the next craft climbs through and the last leader eases back, and the field slowly closes on the frontier. The leader's trail burns cardinal, and its track's notes fill the open space below the frontier in large type, word by word. At the finish the field punches through the frontier, which flares, and runs right off the bottom of the screen, trails and all, while the notes clear; scrolling back up brings it back in from the top. Clicking a craft moves the page to that track's sector at once and lets it take the lead in place, without racing through the sectors in between. Links to `index.html#track-c` land on that sector too. Tune the feel with `LEADER_AT`, `LEAD`, `SPREAD`, `SETTLE_MS` and `HANDOFF_MS` in `ascii.js`.
 - **Navigation extras (homepage):** a right-edge section index (`.rail`, wide screens only) and a floating "Interest list" button (`.float-pill`), hidden over the hero and the interest list. Both are driven by `main.js`.
 - **Motion:** the drifting landscape, characters decoding into place on load, mono labels and figures that decode as they scroll in, every section heading lighting up word by word as it scrolls through the screen (all at one shared display size), the ticker (which flows out of the hero with no rule around it and keeps moving under the pointer) and scroll reveals. With "reduce motion" on, each field draws one still frame, nothing animates, and the tracks race becomes a plain grid of track cards.
 - **Performance:** one animation loop for every field, paused offscreen and in background tabs. If frames run slow on a device, the field switches to bigger characters.

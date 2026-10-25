@@ -914,10 +914,16 @@
     var r = this.stage.getBoundingClientRect();
     var total = r.height - window.innerHeight;
     var before = this.p;
-    var html = document.documentElement, behavior = html.style.scrollBehavior;
-    html.style.scrollBehavior = "auto";
-    window.scrollTo(0, window.scrollY + r.top + total * this.finish * ((i + 0.5) / this.n));
-    html.style.scrollBehavior = behavior;
+    var y = window.scrollY + r.top + total * this.finish * ((i + 0.5) / this.n);
+    var lenis = window.URTC && window.URTC.lenis;
+    if (lenis) {
+      lenis.scrollTo(y, { immediate: true, force: true });   // jump the smooth scroll too, or it would glide back
+    } else {
+      var html = document.documentElement, behavior = html.style.scrollBehavior;
+      html.style.scrollBehavior = "auto";
+      window.scrollTo(0, y);
+      html.style.scrollBehavior = behavior;
+    }
     this.read();
     this.p = this.target;
     this.shift += (before - this.p) * this.distance;

@@ -1357,9 +1357,9 @@ html:not(.js) .page-hero {
 
 /* Live: a tall stage with a full-screen sticky view. Scrolling moves the race;
    each track's notes ride just ahead of its craft while it leads. */
-/* One sector per track (five) and the finish, 60% of a screen of scrolling each.
+/* One sector per track (five) and the finish, 55% of a screen of scrolling each.
    Adding or removing a track? Change the 6 here to the number of tracks plus one. */
-.race.is-live { height: calc(100vh + 6 * 60vh); height: calc(100svh + 6 * 60svh); }
+.race.is-live { height: calc(100vh + 6 * 55vh); height: calc(100svh + 6 * 55svh); }
 .race.is-live .race-sticky {
   position: sticky;
   top: 0;
@@ -1725,42 +1725,64 @@ html:not(.js) .page-hero {
 .footer-bottom p:first-child { max-width: 72ch; }
 .footer-bottom .mono { font-size: 0.6875rem; }
 
-/* Cursor: a dot that opens into a ring over anything you can click (mouse only; main.js adds it) */
+/* Cursor: a dot that opens into a ring over anything you can click (mouse only; main.js adds it).
+   The dot sits on the pointer; with GSAP, the ring glides a beat behind it. */
 .has-cursor, .has-cursor * { cursor: none !important; }
 .has-cursor input, .has-cursor textarea { cursor: text !important; }
 .cursor {
   position: fixed;
   left: 0; top: 0;
   z-index: 95;
-  width: 0; height: 0;
   pointer-events: none;
   transition: opacity 0.2s;
 }
-.cursor::before,
-.cursor::after {
+.cursor-dot,
+.cursor-ring {
+  position: absolute;
+  left: 0; top: 0;
+  will-change: transform;
+}
+.cursor-dot::before,
+.cursor-ring::before {
   content: "";
   position: absolute;
   border-radius: 50%;
-  transition: transform 0.3s var(--ease), opacity 0.25s, background 0.25s, border-color 0.25s;
+  transition: transform 0.3s var(--ease), opacity 0.25s, background 0.25s;
 }
-.cursor::before {
+.cursor-dot::before {
   left: -4px; top: -4px;
   width: 8px; height: 8px;
   background: var(--fg);
   box-shadow: 0 0 10px rgba(240, 70, 75, 0.55);
 }
-.cursor::after {
+.cursor-ring::before {
   left: -22px; top: -22px;
   width: 44px; height: 44px;
   border: 1px solid var(--fg);
   opacity: 0;
   transform: scale(0.2);
 }
-.cursor.is-hover::before { transform: scale(0.5); background: var(--accent); }
-.cursor.is-hover::after { opacity: 1; transform: scale(1); }
-.cursor.is-down::after { transform: scale(0.82); }
-.cursor.is-down::before { transform: scale(0.7); }
+.cursor.is-hover .cursor-dot::before { transform: scale(0.5); background: var(--accent); }
+.cursor.is-hover .cursor-ring::before { opacity: 1; transform: scale(1); }
+.cursor.is-down .cursor-ring::before { transform: scale(0.82); }
+.cursor.is-down .cursor-dot::before { transform: scale(0.7); }
 .cursor.is-off, .cursor.is-text { opacity: 0; }
+
+/* Smooth scrolling (Lenis adds these classes to <html>) */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: clip; }
+.lenis.lenis-smooth iframe { pointer-events: none; }
+
+/* When GSAP is animating something, CSS transitions on the same properties would fight it */
+.has-gsap .rise { animation: none; }
+.has-gsap .reveal:not(.is-settled),
+.has-gsap .fig-grid:not(.is-settled) > li,
+.has-gsap .fig-grid:not(.is-settled) .fig-icon > *,
+.has-gsap .is-scrubbed .w { transition: none; }
+.has-gsap .btn { transition-property: background, color, border-color, box-shadow; }
+.has-gsap .btn:hover, .has-gsap .btn:active { transform: none; }
 
 /* 12. Motion & utilities --------------------------------------------------- */
 .reveal {
