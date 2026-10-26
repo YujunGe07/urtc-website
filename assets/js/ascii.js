@@ -182,29 +182,35 @@
     var w = this.canvas.clientWidth, h = this.canvas.clientHeight;
     if (!w || !h) return false;
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    this.w = w;
-    this.h = h;
-    this.dpr = dpr;
-    this.canvas.width = Math.round(w * dpr);
-    this.canvas.height = Math.round(h * dpr);
-    this.size = clamp(Math.round(w / 116), 9, 13) + this.sizeBump;
-    this.ctx.font = "400 " + this.size + "px " + MONO;
-    this.cw = this.ctx.measureText("M").width || this.size * 0.6;
-    this.ch = Math.round(this.size * 1.3);
-    this.cols = Math.ceil(w / this.cw);
-    this.rows = Math.ceil(h / this.ch);
+    var size = clamp(Math.round(w / 116), 9, 13) + this.sizeBump;
+    // Same size as before: keep the buffers and the canvas, just re-measure the layout below
+    if (w !== this.w || h !== this.h || dpr !== this.dpr || size !== this.size) {
+      this.w = w;
+      this.h = h;
+      this.dpr = dpr;
+      this.size = size;
+      this.canvas.width = Math.round(w * dpr);     // this resets the context, so set the font after
+      this.canvas.height = Math.round(h * dpr);
+      this.ctx.font = "400 " + size + "px " + MONO;
+      this.ctx.textBaseline = "top";
+      this.cw = this.ctx.measureText("M").width || size * 0.6;
+      this.ch = Math.round(size * 1.3);
+      this.cols = Math.ceil(w / this.cw);
+      this.rows = Math.ceil(h / this.ch);
 
-    var n = this.cols * this.rows;
-    this.chars = new Uint16Array(n);
-    this.bright = new Float32Array(n);
-    this.acc = new Float32Array(n);
-    this.heights = new Float32Array(n);
-    this.jitter = new Float32Array(n);
-    for (var i = 0; i < n; i++) this.jitter[i] = hash(i, this.seed);
-    this.ybuf = new Float32Array(this.cols);
-    this.ys = new Float32Array(this.cols);
-    this.bufs = STYLES.map(function () { return new Uint16Array(this.cols); }, this);
-    this.used = new Uint8Array(STYLES.length);
+      var n = this.cols * this.rows;
+      this.chars = new Uint16Array(n);
+      this.bright = new Float32Array(n);
+      this.acc = new Float32Array(n);
+      this.heights = new Float32Array(n);
+      this.lensAt = new Float32Array(n);
+      this.jitter = new Float32Array(n);
+      for (var i = 0; i < n; i++) this.jitter[i] = hash(i, this.seed);
+      this.ybuf = new Float32Array(this.cols);
+      this.ys = new Float32Array(this.cols);
+      this.bufs = STYLES.map(function () { return new Uint16Array(this.cols).fill(SPACE); }, this);
+      this.used = new Uint8Array(STYLES.length);
+    }
     this.horizon = this.measureHorizon();
     this.buildMask();
     if (this.race) this.race.measure();
@@ -410,7 +416,7 @@
   /* Scene: top-down contour map ------------------------------------------- */
   Field.prototype.contour = function () {
     var cols = this.cols, rows = this.rows, cw = this.cw, ch = this.ch;
-    var H = this.heights, n = this.noise, t = this.t;
+    var H = this.heights, L = this.lensAt, n = this.noise, t = this.t;
     var chars = this.chars, bright = this.bright;
     var S = 1 / 280;
     var ax = t * 0.035, ay = t * 0.021;
@@ -425,7 +431,7 @@
         v = py * S;
         var lift = 0;
         if (awake) {
-          var I = this.touch(px, py);
+          var I = L[i] = this.touch(px, py);   // post() reads this back
           if (I > 0) {
             // The wake drags the map along with it and raises a ridge, so rings gather in its path
             u -= this.fx * 0.07 * I * S;
@@ -745,7 +751,7 @@
     var cols = this.cols, rows = this.rows, cw = this.cw, ch = this.ch;
     var chars = this.chars, bright = this.bright, acc = this.acc, jitter = this.jitter;
     var mask = this.mask, halo = this.halo, maskAccent = this.maskAccent, intro = this.intro, k = this.intensity;
-    var awake = this.pts.length > 0;
+    var awake = this.pts.length > 0, lensAt = this.scene === "contour" ? this.lensAt : null;
     var tick = this.tick;
     // Every few seconds a sheen sweeps across the wordmark
     var sweep = (((this.t * 0.11) % 1.6) - 0.3) * (cols + rows);
@@ -754,7 +760,7 @@
       var py = (r + 0.5) * ch;
       for (var c = 0; c < cols; c++, i++) {
         var code = chars[i], b = bright[i], a = acc[i];
-        var la = awake ? this.touch((c + 0.5) * cw, py) : 0;
+        var la = !awake ? 0 : lensAt ? lensAt[i] : this.touch((c + 0.5) * cw, py);
         var m = mask ? mask[i] : 0;
 
         if (m > 0.4) {
@@ -808,14 +814,10 @@
       glow(ctx, pt.x, pt.y, WAKE_PX * (1.3 + p * 0.15), 0.07 * pt.w);
     }
 
-    ctx.font = "400 " + this.size + "px " + MONO;
-    ctx.textBaseline = "top";
     var yOff = Math.round((ch - this.size) / 2);
 
     for (r = 0; r < rows; r++) {
       var base = r * cols;
-      used.fill(0);
-      for (L = 0; L < bufs.length; L++) bufs[L].fill(SPACE);
       for (c = 0; c < cols; c++) {
         var i = base + c, code = chars[i];
         if (code === SPACE) continue;
@@ -833,6 +835,8 @@
         if (!used[L]) continue;
         ctx.fillStyle = STYLES[L];
         ctx.fillText(String.fromCharCode.apply(null, bufs[L]), 0, r * ch + yOff);
+        bufs[L].fill(SPACE);
+        used[L] = 0;
       }
     }
   };
@@ -873,6 +877,9 @@
     this.leader = -1;
     this.carW = 64;
     this.carH = 84;
+    this.order = [];
+    for (var i = 0; i < this.n; i++) this.order.push(i);
+    this.raceVar = "";
     this.stage.classList.add("is-live");
     this.section.classList.add("is-racing");
 
@@ -972,8 +979,7 @@
     this.entry *= Math.exp(-dt / 700);
     if (this.entry < 0.002) this.entry = 0;
     this.flare = fin > 0 && fin < 1 ? Math.sin(Math.min(1, fin * 1.5) * Math.PI) : 0;
-    var order = [];
-    for (i = 0; i < n; i++) order.push(i);
+    var order = this.order;
     order.sort(function (a, b) { return s[b] - s[a]; });
     for (var rank = 0; rank < n; rank++) {
       var j = order[rank];
@@ -992,7 +998,11 @@
         else el.removeAttribute("aria-current");
       });
     }
-    this.section.style.setProperty("--race", this.p.toFixed(4));
+    var raceVar = this.p.toFixed(4);
+    if (raceVar !== this.raceVar) {
+      this.raceVar = raceVar;
+      this.section.style.setProperty("--race", raceVar);
+    }
   };
 
   /* ---------------------------------------------------------------------- */
@@ -1025,8 +1035,8 @@
     requestAnimationFrame(loop);
   }
 
-  function measureAll() {
-    fields.forEach(function (f) {
+  function measureAll(list) {
+    (list || fields).forEach(function (f) {
       f.ready = f.resize();
       if (reduceMotion && f.ready) f.draw();
     });
@@ -1040,28 +1050,35 @@
         entries.forEach(function (entry) { entry.target._asciiField.visible = entry.isIntersecting; });
         wake();
       }, { rootMargin: "80px 0px" });
-      fields.forEach(function (f) {
-        f.canvas._asciiField = f;
-        io.observe(f.canvas);
-      });
+      fields.forEach(function (f) { io.observe(f.canvas); });
     }
-    var remeasure = debounce(measureAll, 150);
+    var pending = [];
+    var flush = debounce(function () { var list = pending; pending = []; measureAll(list); }, 150);
+    var remeasure = function (list) {
+      (list || fields).forEach(function (f) { if (pending.indexOf(f) < 0) pending.push(f); });
+      flush();
+    };
+    var remeasureAll = function () { remeasure(); };
     if ("ResizeObserver" in window) {
-      var ro = new ResizeObserver(remeasure);
+      var ro = new ResizeObserver(function (entries) {
+        remeasure(entries.map(function (entry) { return entry.target._asciiField; }));
+      });
       fields.forEach(function (f) { ro.observe(f.canvas); });
     } else {
-      window.addEventListener("resize", remeasure);
+      window.addEventListener("resize", remeasureAll);
     }
-    if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener("loadingdone", remeasure);
+    if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener("loadingdone", remeasureAll);
     // Entrance animations move the copy a little; re-measure the wordmark once they settle
-    setTimeout(remeasure, 1500);
+    setTimeout(remeasureAll, 1500);
     document.addEventListener("visibilitychange", wake);
   }
 
   canvases.forEach(function (canvas) {
     // The race is all motion; with reduced motion it stays a plain list and isn't drawn
     if (canvas.getAttribute("data-ascii") === "race" && reduceMotion) return;
-    fields.push(new Field(canvas));
+    var f = new Field(canvas);
+    canvas._asciiField = f;
+    fields.push(f);
   });
 
   // Measuring needs the faces loaded; don't wait more than a moment for them

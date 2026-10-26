@@ -832,10 +832,9 @@ html:not(.js) .page-hero {
 /* main.js lights headings word by word as they scroll through the screen */
 .is-scrubbed .w {
   opacity: 0.12;
-  filter: blur(3px);
-  transition: opacity 0.85s var(--ease), filter 0.85s var(--ease);
+  transition: opacity 0.85s var(--ease);
 }
-.is-scrubbed .w.is-lit { opacity: 1; filter: none; }
+.is-scrubbed .w.is-lit { opacity: 1; }
 
 .lede {
   max-width: 56ch;
@@ -1596,12 +1595,10 @@ html:not(.js) .page-hero {
   display: grid;
   gap: 28px;
   padding: clamp(28px, 4vw, 44px);
-  background: linear-gradient(160deg, rgba(30, 26, 26, 0.72), rgba(10, 9, 9, 0.78));
+  background: linear-gradient(160deg, rgba(30, 26, 26, 0.9), rgba(10, 9, 9, 0.92));
   border: 1px solid rgba(236, 235, 232, 0.14);
   border-radius: calc(var(--radius) + 4px);
   box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(236, 235, 232, 0.06);
-  -webkit-backdrop-filter: blur(14px) saturate(1.2);
-  backdrop-filter: blur(14px) saturate(1.2);
 }
 .signup-form::before {
   content: "Interest list /// 2027"; content: "Interest list /// 2027" / "";

@@ -356,8 +356,8 @@
       if (motion) {
         // Lit from when the top crosses 92% of the screen until a third of a screen later;
         // scrub eases the words a beat behind the scroll, so they fade rather than flip
-        gsap.fromTo(words, { opacity: 0.12, filter: "blur(3px)" }, {
-          opacity: 1, filter: "blur(0px)", ease: "none", stagger: 0.12,
+        gsap.fromTo(words, { opacity: 0.12 }, {
+          opacity: 1, ease: "none", stagger: 0.12,
           scrollTrigger: { trigger: el, start: "top 92%", end: "top 60%", scrub: 0.6 }
         });
         return;
@@ -391,16 +391,26 @@
   /* ---------------------------------------------------------------------- */
   if (window.matchMedia("(pointer: fine)").matches) {
     var SPOT = ".card, .fig-cell, .roadmap li, .steps li, .stat, .track";
+    var spotEl = null, spotX = 0, spotY = 0, spotRaf = null;
+    var spot = function () {
+      spotRaf = null;
+      if (!spotEl) return;
+      var r = spotEl.getBoundingClientRect();
+      spotEl.style.setProperty("--mx", (spotX - r.left).toFixed(0) + "px");
+      spotEl.style.setProperty("--my", (spotY - r.top).toFixed(0) + "px");
+    };
     document.addEventListener("pointermove", function (e) {
       var el = e.target.closest && e.target.closest(SPOT);
       if (!el) return;
-      var r = el.getBoundingClientRect();
-      el.style.setProperty("--mx", (e.clientX - r.left).toFixed(0) + "px");
-      el.style.setProperty("--my", (e.clientY - r.top).toFixed(0) + "px");
+      spotEl = el;
+      spotX = e.clientX;
+      spotY = e.clientY;
+      if (!spotRaf) spotRaf = requestAnimationFrame(spot);
     }, { passive: true });
     document.addEventListener("pointerout", function (e) {
       var el = e.target.closest && e.target.closest(SPOT);
       if (el && !el.contains(e.relatedTarget)) {
+        if (el === spotEl) spotEl = null;
         el.style.removeProperty("--mx");
         el.style.removeProperty("--my");
       }
@@ -530,10 +540,20 @@
     if (tickerTrack) {
       tickerTrack.style.animation = "none";
       var ticker = gsap.to(tickerTrack, { xPercent: -50, duration: 80, ease: "none", repeat: -1 });
+      ScrollTrigger.create({
+        trigger: tickerTrack.parentNode, start: "top bottom", end: "bottom top",
+        onToggle: function (self) { if (self.isActive) ticker.play(); else ticker.pause(); }
+      });
       if (lenis) {
-        lenis.on("scroll", function (e) {
-          gsap.to(ticker, { timeScale: 1 + Math.min(6, Math.abs(e.velocity) * 0.25), duration: 0.25, overwrite: true });
-          gsap.to(ticker, { timeScale: 1, duration: 1.4, delay: 0.3, ease: "power2.out" });
+        var boost = 0, pace = 1;
+        lenis.on("scroll", function (e) { boost = Math.max(boost, Math.min(6, Math.abs(e.velocity) * 0.25)); });
+        gsap.ticker.add(function (time, dt) {
+          if (!boost && pace === 1) return;
+          pace += (1 + boost - pace) * (1 - Math.exp(-dt / 90));   // quick to speed up...
+          boost *= Math.exp(-dt / 450);                            // ...then it eases back to its own pace
+          if (boost < 0.01) boost = 0;
+          if (!boost && Math.abs(pace - 1) < 0.005) pace = 1;
+          ticker.timeScale(pace);
         });
       }
     }
