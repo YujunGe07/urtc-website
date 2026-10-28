@@ -18,7 +18,8 @@ Then open http://localhost:4321.
 index.html          Home: hero, mission, format, tracks race, impact, essentials, roadmap, interest list
 about.html          What URTC is, who it's for, relationship to MIT URTC, common questions
 submit.html         Call for Research: formats, eligibility, dates, how to submit
-team.html           Join the Team: four open chair roles
+volunteer.html      Volunteer: day-of volunteer roles (organizing team is full)
+team.html           Redirects to volunteer.html (old link kept working)
 sponsors.html       Sponsor pitch + contact (tiers placeholder)
 contact.html        The contact email link (from config.js)
 favicon.svg         Site icon (same as the logo mark)
@@ -37,7 +38,7 @@ templates/page-template.html  Starting point for new pages
 | Setting | What it does when filled in |
 |---|---|
 | `interestFormEndpoint` | Makes the email signup actually submit. Use Formspree, Basin, or anything else that accepts a form POST and returns JSON. Google Forms won't work here. |
-| `teamApplicationUrl` | Points every "Apply" button on the team page to your form. Until it's set, the buttons go to the Contact page. |
+| `teamApplicationUrl` | Not currently used: the organizing team is full and the application form is closed. |
 | `contactEmail`, `sponsorEmail` | Displays the addresses and turns them into `mailto:` links. |
 | `cmtPortalUrl` | Turns on the "Submission portal" button on the Call for Research page. |
 

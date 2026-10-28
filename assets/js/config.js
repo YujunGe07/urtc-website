@@ -10,11 +10,11 @@ window.URTC_CONFIG = {
   interestFormEndpoint: "",
 
   // Link to the organizing-team application (Google Form, Airtable, etc.).
-  teamApplicationUrl: "https://docs.google.com/forms/d/e/1FAIpQLScBr9x70q9vHWxMlBsKSPoXXltjZVnwpd_nBxhkbzVb28l_Fg/viewform",
+  teamApplicationUrl: "",   // organizing team is full; applications closed
 
   // Public email addresses. Shown as text and used for mailto: links.
-  contactEmail: "",
-  sponsorEmail: "",
+  contactEmail: "yujunge@stanford.edu",
+  sponsorEmail: "yujunge@stanford.edu",
 
   // Paper submission portal (Microsoft CMT). Add once the call for papers opens.
   cmtPortalUrl: ""
