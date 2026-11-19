@@ -58,7 +58,7 @@ Adding or removing a track: copy or delete a `.car` button and a `.track` item i
 
 ### Confirm a tentative detail
 
-Search the HTML for `class="tbc"`. Every unconfirmed item (the date, venue, Friday events and keynote) is marked with one of these chips. Once something is officially confirmed, update the text and delete the chip. **Don't remove a chip until the detail is confirmed.**
+Search the HTML for `class="tbc"`. Every unconfirmed item (the dates, venue, Sunday activities and keynote) is marked with one of these chips. Once something is officially confirmed, update the text and delete the chip. **Don't remove a chip until the detail is confirmed.**
 
 Content rules while things are pending:
 - List a host department only once it has approved. See the `TODO` in `about.html`.
