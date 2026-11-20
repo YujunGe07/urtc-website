@@ -449,10 +449,10 @@
   /* Floating pill: hidden over the hero (it has its own buttons), the tracks race
      (it would sit on the race panel) and once the interest list is on screen */
   var pill = document.querySelector("[data-float-pill]");
-  var pillTarget = pill && document.querySelector(pill.getAttribute("href"));
+  var pillTarget = pill && pill.getAttribute("data-hide-near") && document.querySelector(pill.getAttribute("data-hide-near"));
   var pillHero = document.querySelector(".hero");
   var pillRace = document.querySelector("[data-race-stage]");
-  if (pill && pillTarget && "IntersectionObserver" in window) {
+  if (pill && "IntersectionObserver" in window) {
     var inView = new Map();
     var onView = function (entries) {
       entries.forEach(function (entry) { inView.set(entry.target, entry.isIntersecting); });
@@ -461,7 +461,7 @@
       pill.classList.toggle("is-hidden", hide);
     };
     var pillIO = new IntersectionObserver(onView, { threshold: 0.15 });
-    pillIO.observe(pillTarget);
+    if (pillTarget) pillIO.observe(pillTarget);
     if (pillHero) pillIO.observe(pillHero);
     // The race stage is many screens tall, so any overlap at all counts
     if (pillRace) new IntersectionObserver(onView).observe(pillRace);

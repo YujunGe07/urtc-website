@@ -633,6 +633,7 @@ html:not(.js) .page-hero {
   color: var(--fg-2);
 }
 .hero-place .tbc { margin-left: 0.6em; }
+.hero-place .hero-note { color: var(--accent); }
 .hero-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 
 /* Research-areas ticker */
