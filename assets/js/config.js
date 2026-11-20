@@ -4,10 +4,8 @@
    state instead of a broken link.
    ========================================================================== */
 window.URTC_CONFIG = {
-  // Interest-list form endpoint. Works with Formspree (https://formspree.io),
-  // Basin, or any service that accepts a POST of form data and returns JSON.
-  // Example: "https://formspree.io/f/abcdwxyz"
-  interestFormEndpoint: "",
+  // Interest-list Google Form. Every "Join the interest list" button opens it.
+  interestFormUrl: "https://docs.google.com/forms/d/e/1FAIpQLSdKEIcE6pOFHyZjhuVtExWa-aChYrIekIb4XzzsA6sqv63Jvg/viewform",
 
   // Link to the organizing-team application (Google Form, Airtable, etc.).
   teamApplicationUrl: "",   // organizing team is full; applications closed

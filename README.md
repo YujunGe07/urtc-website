@@ -37,7 +37,7 @@ templates/page-template.html  Starting point for new pages
 
 | Setting | What it does when filled in |
 |---|---|
-| `interestFormEndpoint` | Makes the email signup actually submit. Use Formspree, Basin, or anything else that accepts a form POST and returns JSON. Google Forms won't work here. |
+| `interestFormUrl` | The interest-list Google Form. The homepage "Attend" section introduces it, and every "Join the interest list" button opens it. Site-wide "Get updates" links point to that section (`index.html#interest`). |
 | `teamApplicationUrl` | Not currently used: the organizing team is full and the application form is closed. |
 | `contactEmail`, `sponsorEmail` | Displays the addresses and turns them into `mailto:` links. |
 | `cmtPortalUrl` | Turns on the "Submission portal" button on the Call for Research page. |
